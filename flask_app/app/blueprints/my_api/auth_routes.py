@@ -1,9 +1,9 @@
 from flask import jsonify, request
 from flask_jwt_extended import create_access_token, unset_jwt_cookies, jwt_required, set_access_cookies
 from app.models import User
-from . import bp as api
+from . import bp_auth as auth
 
-@api.route('/signin', methods = ['POST'])
+@auth.route('/signin', methods = ['POST'])
 def signin():
     username, password = request.json.get('username'), request.json.get('password')
     user = User.query.filter_by(username = username).first()
@@ -15,7 +15,7 @@ def signin():
     else:
         return jsonify({'message': "Invalid Username or Password / Try Again"}), 400
 
-@api.route('/signup', methods = ['POST'])
+@auth.route('/signup', methods = ['POST'])
 def signup():
     info = request.json
     response = {}
@@ -36,12 +36,12 @@ def signup():
     except:
         return jsonify(response), 400
 
-@api.route('/signout', methods = ['POST'])
+@auth.route('/signout', methods = ['POST'])
 def signout():
     response = jsonify({'msg' : 'signout successful'})
     return response, 200
 
-@api.delete('/delete-user/<username>')
+@auth.delete('/delete-user/<username>')
 @jwt_required(fresh= True)
 def delete_user(username):
     password = request.json.get('password')
