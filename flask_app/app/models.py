@@ -85,9 +85,9 @@ class Rmend(db.Model):
     rmend_id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable = False)
     user_rating = db.Column(db.String(), nullable = True)
+    title = db.Column(db.String(), nullable = False)
     body = db.Column(db.String(), nullable = True)
     media_id = db.Column(db.String(), nullable = False)
-    title = db.Column(db.String(), nullable = False)
     year = db.Column(db.String(), nullable = False)
     type = db.Column(db.String(), nullable = False)
     description = db.Column(db.String(), nullable = True)
@@ -96,6 +96,7 @@ class Rmend(db.Model):
     date_added = db.Column(db.DateTime, default = datetime.utcnow)
     rmend_for_title = db.Column(db.String(), nullable = True)
     rmend_for_type = db.Column(db.String(), nullable = True)
+    #rmend_for_media_id = db.Column(db.String(), nullable = True)
     liked_by = db.relationship('User',
         secondary = all_likes, 
         primaryjoin = ('Rmend.rmend_id==all_likes.c.liked_rmend'), 
@@ -111,18 +112,24 @@ class Rmend(db.Model):
         lazy = True
     )
 
-    def fromDict(self, d):
-        self.user_id = d['username']
+    def __repr__(self):
+        return f"{self.to_dict()}"
+
+    def from_dict(self, d):
+        self.user_rating = d['user_rating']
         self.title = d['title']
-        self.year = d['year']
-        self.rated = d['rated']
         self.body = d['body']
-        self.media_type = d['media_type']
+        self.media_id = d['media_id']
+        self.year = d['year']
+        self.type = d['type']
+        self.description = d['description']
+        self.author = d['author']
         self.img = d['img'] 
-        self.rmend_for_title = d['rmend_for']
+        self.rmend_for_title = d['rmend_for_title']
+        self.rmend_for_type = d['rmend_for_type']
 
     def totalLikes(self):
-        return len(self.likes.likers)
+        return len(self.liked_by)
 
     def to_dict(self):
         d = {
@@ -151,13 +158,27 @@ class Rmend(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def update_body(self, body):
-        self.body = body
+    def update_rmend(self):
         db.session.commit()
 
     def delete_rmend(self):
         db.session.delete(self)
         db.session.commit()
+
+    def is_duplicate(self):
+        dup = Rmend.query.filter(
+            Rmend.user_id == self.user_id,
+            Rmend.title == self.title,
+            Rmend.year == self.year,
+            Rmend.type == self.type,
+            Rmend.rmend_for_title == self.rmend_for_title,
+            Rmend.rmend_for_type == self.rmend_for_type  
+        ).first()
+        if dup:
+            return True
+        return False
+        
+
 
 
 #GENRE
@@ -181,59 +202,10 @@ class Genre(db.Model):
         db.session.commit()
 
 
-#MEDIA:
-""" class Media(db.Model):
-    media_id = db.Column(db.Integer, primary_key = True)
-    second_id = db.Column(db.String(), nullable = True)
-    title = db.Column(db.String(), nullable = False)
-    year = db.Column(db.String(), nullable = False)
-    format_type = db.Column(db.String(), nullable = False)
-    author = db.Column(db.String(), nullable = False)
-    rating = db.Column(db.Integer, nullable = True)
-    description = db.Column(db.String(), nullable = True)
-    img = db.Column(db.String(), nullable = False)
-    genres = db.relationship('Genre', secondary = media_genre_table, backref = 'medias', foreign_keys="Genre.genre_id")
-
-    def commit(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def delete_media(self):
-        db.session.delete(self)
-        db.session.commit()
-
-    def from_dict(self, d):
-        self.media_id  = d['media_id']
-        self.second_id  = d['second_id']
-        self.title  = d['title']
-        self.year = ['year']
-        self.format_type = ['format_type']
-        self.author = ['author']
-        self.rating = ['rating']
-        self.description = ['description']
-        self.img = ['img']
-        self.genres = ['genres']
-
-    def to_dict(self):
-        d = {
-            'media_id' : self.media_id,
-            'second_id' : self.second_id,
-            'title' : self.title,
-            'year' : self.year,
-            'format_type' : self.format_type,
-            'author' : self.author,
-            'rating' : self.rating,
-            'description' : self.description,
-            'img' : self.img,
-            'genres' : [genre for genre in self.genres],
-        }
-        return d """
-
-
-
-
-
+#Implement later -->
 #COLLECTION: ID, user Relationship,
 #class Mood(db.Model):
 #    mood_id = db.Column(db.Integer, primary_key = True)
 #    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable = False)
+
+#FAVORITES: User has one favorite of each media type and displays on profile
