@@ -2,6 +2,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date, datetime
 from app import db
 
+#WIPE from SQL Browser: DELETE FROM alembic_version;
+
 rmend_genre_table = db.Table('rmend_genre_table',
     db.Column('genre_id', db.Integer, db.ForeignKey('genre.genre_id')),
     db.Column('rmend_id', db.Integer, db.ForeignKey('rmend.rmend_id'))  
@@ -69,17 +71,63 @@ class User(db.Model):
         self.pass_hash  = d['password']
         self.hash_password(self.pass_hash)  
 
-    def to_dict(self):
+    def user_to_dict(self):
         d = {
-            'user_id' : self.user_id,
             'username' : self.username,
             'email' : self.email,
-            'joined' : self.joined
+            'joined' : self.joined,
+            'follower_count' : self.followers.count(),
+            'following_count' : self.follows.count()
         }
         return d
 
-#WIPE from SQL Browser: DELETE FROM alembic_version;
+    def user_profile_to_dict(self):
+        d = self.user_to_dict()
+        d['followers'] = [user.user_to_dict() for user in self.followers.all()]
+        d['following'] = [user.user_to_dict() for user in self.follows.all()]
+        d['rmends'] = [rmend.to_dict() for rmend in self.rmends]
+        return d
 
+    def follow_user(self, username):
+        if username == self.username:
+            return False
+        user = User.query.filter_by(username = username).first()
+        if user in self.follows.all():
+            return False
+        else:
+            self.follows.append(user)
+            db.session.commit()
+            return True
+
+    def unfollow_user(self, username):
+        if username == self.username:
+            return False
+        user = User.query.filter_by(username = username).first()
+        if user in self.follows.all():
+            self.follows.remove(user)
+            db.session.commit()
+            return True
+        else: return False
+
+    def like_rmend(self, rmend_id):
+        rmend = Rmend.query.filter_by(rmend_id = rmend_id).first()
+        if rmend in self.liked_rmends:
+            return False
+        else:
+            self.liked_rmends.append(rmend)
+            db.session.commit()
+            return True
+
+    def unlike_rmend(self, rmend_id):
+        rmend = Rmend.query.filter_by(rmend_id = rmend_id).first()
+        if rmend in self.liked_rmends:
+            self.liked_rmends.remove(rmend)
+            db.session.commit()
+            return True
+        else:
+            return False
+
+    
 #RMEND: ID, user Relationship, body, title, media_type, year, img, rated, date added
 class Rmend(db.Model):
     rmend_id = db.Column(db.Integer, primary_key = True)
@@ -180,7 +228,6 @@ class Rmend(db.Model):
         
 
 
-
 #GENRE
 class Genre(db.Model):
     genre_id = db.Column(db.Integer, primary_key = True)
@@ -201,6 +248,13 @@ class Genre(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+    def is_duplicate(self):
+        dup = Genre.query.filter_by(title = self.title).first()
+        if dup:
+            return True
+        return False
+
+
 
 #Implement later -->
 #COLLECTION: ID, user Relationship,
@@ -208,4 +262,6 @@ class Genre(db.Model):
 #    mood_id = db.Column(db.Integer, primary_key = True)
 #    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable = False)
 
+
 #FAVORITES: User has one favorite of each media type and displays on profile
+

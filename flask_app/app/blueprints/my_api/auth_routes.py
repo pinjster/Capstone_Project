@@ -8,12 +8,24 @@ def signin():
     username, password = request.json.get('username'), request.json.get('password')
     user = User.query.filter_by(username = username).first()
     if user and user.check_password(password):
-        response = jsonify({"msg": "signin successful"})
         access_token = create_access_token(identity= username, fresh=True)
-        set_access_cookies(response, access_token)
-        return jsonify({'access_token' : access_token}), 200
+        return jsonify({
+            'success' : True,
+            'status' : "successfully logged in user",
+            'access_token' : access_token}), 200
+    if not user:
+        return jsonify({
+            'success' : False,
+            'status': "Username does not exist"}), 409
+    elif not user.check_password(password):
+        return jsonify({
+            'success' : False,
+            'status': "Invalid password"}), 409
     else:
-        return jsonify({'message': "Invalid Username or Password / Try Again"}), 400
+        return jsonify({
+            'success' : False,
+            'status': "was unable to login"}), 409
+
 
 @auth.route('/signup', methods = ['POST'])
 def signup():
@@ -36,10 +48,12 @@ def signup():
     except:
         return jsonify(response), 400
 
+
 @auth.route('/signout', methods = ['POST'])
 def signout():
     response = jsonify({'msg' : 'signout successful'})
     return response, 200
+
 
 @auth.delete('/delete-user/<username>')
 @jwt_required(fresh= True)
@@ -50,3 +64,4 @@ def delete_user(username):
         user.delete_user()
         return jsonify(status= f'User deleted'), 200
     return jsonify(status= 'Invalid Username/Password'), 400
+

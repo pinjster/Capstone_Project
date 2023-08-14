@@ -91,3 +91,47 @@ def delete_recommend(rmend_id):
             'success' : True,
             'status' : 'rmend deleted'
         }), 200
+    
+
+@rmnd.get("/like/<rmend_id>")
+@jwt_required()
+def like_rmend(rmend_id):
+    rmend = Rmend.query.filter_by(rmend_id = rmend_id).first()
+    if not rmend:
+        return jsonify({
+            'success' : False,
+            'status' : 'rmend does not exist'
+        }), 409
+    curr = User.query.filter_by(username = get_jwt_identity()).first()
+    if curr.like_rmend(rmend_id):
+        return jsonify({
+            'success' : True,
+            'status' : 'liked rmend'
+        }), 200
+    else:
+        return jsonify({
+            'success' : False,
+            'status' : 'already liked rmend'
+        }), 409
+
+
+@rmnd.delete("/unlike/<rmend_id>")
+@jwt_required()
+def unlike_rmend(rmend_id):
+    rmend = Rmend.query.filter_by(rmend_id = rmend_id).first()
+    if not rmend:
+        return jsonify({
+            'success' : False,
+            'status' : 'rmend does not exist'
+        }), 409
+    curr = User.query.filter_by(username = get_jwt_identity()).first()
+    if curr.unlike_rmend(rmend_id):
+        return jsonify({
+            'success' : True,
+            'status' : 'unliked rmend'
+        }), 200
+    else:
+        return jsonify({
+            'success' : False,
+            'status' : 'cannot unlike this rmend as it has never been initially liked'
+        }), 409
