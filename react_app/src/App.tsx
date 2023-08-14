@@ -1,5 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import MainPage from "./pages/MainPage"
+import SignInPage from "./pages/SignInPage"
+import SignUpPage from "./pages/SignUpPage"
+import SignOutPage from "./pages/SignOutPage"
 
 
 function App() {
@@ -8,7 +11,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={ <MainPage /> } />
-        <Route path="/" element={ <></> } />
+        <Route path="/sign-in" element={ <SignInPage/> } />
+        <Route path="/sign-up" element={ <SignUpPage/> } />
+        <Route path="/sign-out" element={ <SignOutPage/> } />
         <Route path="*" element={ <Navigate to="/" /> } />
       </Routes>
     </BrowserRouter>

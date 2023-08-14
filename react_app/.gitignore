@@ -24,4 +24,5 @@ dist-ssr
 *.sw?
 
 
-blank.txt
+rquires.txt
+.env
