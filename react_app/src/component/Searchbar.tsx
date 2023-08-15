@@ -49,7 +49,7 @@ export default function Searchbar() {
                 <input type="text" ref={searchField} placeholder="search movie by title"/>
                 <input type="submit" value="Search" />
             </form>
-            { results.map((result, i) => <Rmend media={result} key={i} /> )}
+            { results.map((result, i) => <Rmend media={result} add key={i} /> )}
         </div>
         
     )

@@ -23,8 +23,8 @@ export type RmendType = {
     body: string,
     userRating: string,
     dateAdded: string,
-    rmendForTitle: string,
-    rmendForType: string,
+    rmendForTitle?: string,
+    rmendForType?: string,
     totalLikes: number,
 }
 

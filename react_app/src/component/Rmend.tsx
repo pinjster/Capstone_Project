@@ -1,4 +1,5 @@
 import { MediaType } from "../types"
+import AddRmendForm from "./AddRmendForm"
 
 interface Rmendable {
     media: MediaType,
@@ -31,7 +32,7 @@ function Rmend({ media, edit, add }: Rmendable) {
                 <input type="button" value="Press Me" />
             </form> : ''}
             { add ? 
-            <form action=""></form> : ''
+            <AddRmendForm /> : ''
             }
         </div>
     </div>
