@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react"
 import { UserContext } from "../contexts/UserProvider"
 import { useNavigate } from "react-router-dom"
+import Body from "../component/Body"
 
 function SignOutPage() {
 
@@ -19,7 +20,9 @@ function SignOutPage() {
   })
 
   return (
-    <div>SignOutPage</div>
+    <Body>
+      <h1>Sign Out</h1>
+    </Body>
   )
 }
 

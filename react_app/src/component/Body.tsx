@@ -2,17 +2,18 @@ import Navbar from "./Navbar"
 import Footer from "./Footer"
 
 interface BodyProps {
-    navbar: boolean,
+    navbar?: boolean,
+    footer?: boolean,
     children: JSX.Element | JSX.Element[]
 }
 
-export default function Body({navbar, children}: BodyProps) {
+export default function Body({navbar, footer, children}: BodyProps) {
     
     return (
         <div className="body-component">
             { navbar && <Navbar />}
             {children}
-            { <Footer /> }
+            { footer && <Footer /> }
         </div>
     )
 }

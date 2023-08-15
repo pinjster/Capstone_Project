@@ -1,10 +1,46 @@
 :root {
   --main-bg-color: grey;
+  --rmend-bg-color: rgba(255, 255, 255, 0.658);
+  --faded-white: rgba(214, 214, 214, 0.863);
+  --dark-purple: rgb(17, 4, 17);
+  --dark-grey: rgb(29, 29, 29);
+  --blackish: rgb(14, 14, 14);
+  --rich-green: rgb(0, 48, 4);
+  --redness: rgb(141, 1, 1);
 }
 
-html {
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   background-color: var(--main-bg-color);
+}
+
+.rmend {
+  margin: 0 auto 1.5rem auto;
+  padding: 25px;
+  min-width: 430px;
+  max-width: 70%;
+  background-color: var(--faded-white);
+  color: var(--blackish);
+  border-radius: 35px;
+}
+
+.rmend-display {
+  display: flex;
+  flex-direction: row;
+}
+
+.rmend-button {
+  display: flex;
+  width: 100%;
+  justify-content: right;
+  margin-right: 20px;
+}
+
+.rmend-img {
+  width:  11rem;
+  height:  auto;
+  aspect-ratio: 1 / 1.5;
+  padding-right: 20px;
 }

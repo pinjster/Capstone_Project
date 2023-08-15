@@ -1,10 +1,11 @@
+import Body from "../component/Body"
 import SignUpForm from "../component/SignUpForm"
 
 function SignUpPage() {
   return (
-    <div>
+    <Body navbar footer>
       <SignUpForm />
-    </div>
+    </Body>
   )
 }
 
