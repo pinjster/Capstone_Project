@@ -13,6 +13,7 @@ def add_rmend():
             new_rmend = Rmend()
             new_rmend.user_id = user.user_id
             new_rmend.from_dict(info)
+            new_rmend.handle_genres(info['genres'])
             if not new_rmend.is_duplicate():
                 new_rmend.commit()
                 return jsonify({
@@ -71,7 +72,7 @@ def edit_rmend():
             })
         
 
-@rmnd.delete("/delete-recommend/<rmend_id>")
+@rmnd.delete("/delete-rmend/<rmend_id>")
 @jwt_required()
 def delete_recommend(rmend_id):
     rmend = Rmend.query.filter_by(rmend_id = rmend_id).first()
@@ -135,3 +136,8 @@ def unlike_rmend(rmend_id):
             'success' : False,
             'status' : 'cannot unlike this rmend as it has never been initially liked'
         }), 409
+    
+@rmnd.get('/media-rmends/<type>/<id>')
+def media_rmends(type, id):
+    rmends = Rmend.query.filter(Rmend.type == type, Rmend.media_id == id).all()
+    return jsonify({ 'rmends': [rmend.to_dict() for rmend in rmends] }), 200

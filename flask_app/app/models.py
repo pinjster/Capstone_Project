@@ -133,7 +133,7 @@ class User(db.Model):
 class Rmend(db.Model):
     rmend_id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable = False)
-    user_rating = db.Column(db.String(), nullable = True)
+    user_rating = db.Column(db.Integer, nullable = True)
     title = db.Column(db.String(), nullable = False)
     body = db.Column(db.String(), nullable = True)
     media_id = db.Column(db.String(), nullable = False)
@@ -179,6 +179,17 @@ class Rmend(db.Model):
 
     def totalLikes(self):
         return len(self.liked_by)
+    
+    def handle_genres(self, genres):
+        for genre in genres:
+            ng = Genre()
+            ng.title = genre
+            if not ng.is_duplicate():
+                ng.commit()
+                self.genres.append(ng)
+            else:
+                og = Genre.query.filter_by(title = ng.title).first()
+                self.genres.append(og)
 
     def to_dict(self):
         d = {
@@ -200,6 +211,7 @@ class Rmend(db.Model):
                 'for_type' : self.rmend_for_type,
             },
             'total_likes' : self.totalLikes(),
+            'genres': [genre for genre in self.genres]
         }
         return d
 

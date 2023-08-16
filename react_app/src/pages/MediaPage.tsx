@@ -27,6 +27,7 @@ function MediaPage() {
       <div>
         <h1>Media</h1>
         { thisMedia ? <Media media={thisMedia}></Media> : 'We cannot find that which does not exist...' }
+        { !thisMedia ? '' : '' }
       </div>
     )
 }
