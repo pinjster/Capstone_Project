@@ -12,6 +12,7 @@ export type MediaType = {
     mediaID: number,
     type: string,
     description: string,
+    author: string,
     img: string,
     genre: string[],
 }

@@ -21,7 +21,7 @@ function App() {
         <Route path="/my-profile" element={ <MyProfilePage /> } />
         <Route path="/:username/profile" element={ <UserProfilePage /> } />
         <Route path="/about" element={ <AboutPage /> } />
-        <Route path="media/:type/:id" element={ <MediaPage /> } />
+        <Route path={"/media/:type/:id/:index?"} element={ <MediaPage /> } />
         <Route path="*" element={ <Navigate to="/" /> } />
       </Routes>
     </BrowserRouter>

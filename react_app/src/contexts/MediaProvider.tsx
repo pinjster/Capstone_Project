@@ -6,6 +6,7 @@ interface MediaContextValues {
     medias: MediaType[],
     setMedias: Dispatch<SetStateAction<MediaType[]>>,
     resetMedias: () => void,
+    searchByMediaId: (type: string, id: number) => {},
     searchMoviesTvTitle: (title :string) => {},
     getTvInfo: (id: number) => {},
     getMovieInfo: (id: number) => {},
@@ -20,6 +21,28 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     const resetMedias = () => {
         setMedias([])
     }
+        //NEEDS FIXED I GUESS
+    const searchByMediaId = async (type: string, id: number) => {
+        if(type === 'movie'){
+            const movie = await getMovieInfo(id);
+            if(movie){
+                return movie;
+            }
+        } else if(type === 'tv'){
+            const tv = await getTvInfo(id);
+            if(tv){
+                return tv;
+            }
+        } else if(type === 'album'){
+            return undefined
+        } else if(type === 'podcast'){
+            return undefined
+        } else if(type === 'game'){
+            return undefined
+        } else {
+            return undefined
+        }
+    }
 
     const searchMoviesTvTitle = async (title: string) => {
         await moviedb.searchMulti({ query: `${title}` })
@@ -32,7 +55,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
                                 setMedias((medias) => [...medias, movie!])
                             } else if(item.media_type == 'tv'){
                                 const tv = await getTvInfo(item.id)
-                                setMedias((medias) => [...medias, TvToMediaType(tv!)]),[]
+                                setMedias((medias) => [...medias, tv!]),[]
                             }
                         }
                     }
@@ -44,7 +67,8 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     const getTvInfo = (id: number) => {
         const tv = moviedb.tvInfo({ id: id })
         .then((res) => {
-            return res;
+            const formatTv = TvToMediaType(res)
+            return formatTv;
         })
         .catch(console.error)
         return tv
@@ -67,10 +91,12 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         }
         return {
             title: movie.title || 'unknown',
-            year: movie.release_date || 'unknown',
+            year: movie.release_date?.slice(0,4) || 'unknown',
             mediaID: movie.id!,
             type: "movie",
             description: movie.overview || 'unknown',
+            author: 'just some guy',
+            //author: movie.production_companies![0].name! || 'unknown', 
             img: "https://image.tmdb.org/t/p/w500/" + movie.poster_path || '',
             genre: genre
         };
@@ -83,10 +109,12 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         }
         return {
             title: tv.original_name || 'unknown',
-            year: tv.first_air_date || 'unknown',
+            year: tv.first_air_date?.slice(0,4) + ' - ' + (tv.last_air_date?.slice(0,4) || '????') || 'unknown',
             mediaID: tv.id!,
             type: 'tv',
             description: tv.overview || 'unknown',
+            author: 'just some guy',
+            //author: tv.created_by![0].name! || 'unknown',
             img: "https://image.tmdb.org/t/p/w500/" + tv.poster_path || '',
             genre: genre,
         }
@@ -96,6 +124,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         medias,
         setMedias,
         resetMedias,
+        searchByMediaId,
         searchMoviesTvTitle,
         getMovieInfo,
         getTvInfo,

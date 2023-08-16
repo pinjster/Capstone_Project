@@ -2,7 +2,7 @@
   --main-bg-color: rgb(117, 117, 117);
   --rmend-bg-color: rgba(255, 255, 255, 0.658);
   --faded-white: rgba(214, 214, 214, 0.863);
-  --dark-purple: rgb(17, 4, 17);
+  --dark-purple: rgb(26, 3, 26);
   --dark-grey: rgb(29, 29, 29);
   --blackish: rgb(14, 14, 14);
   --rich-green: rgb(0, 48, 4);
@@ -75,6 +75,10 @@ a {
   height:  auto;
   aspect-ratio: 1 / 1.5;
   padding-right: 20px;
+}
+
+.media-title-link {
+  color: var(--dark-purple);
 }
 
 .media-description-indent {

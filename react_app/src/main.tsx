@@ -4,13 +4,16 @@ import App from './App.tsx'
 import './index.css'
 import UserProvider from './contexts/UserProvider.tsx'
 import MediaProvider from './contexts/MediaProvider.tsx'
+import RmendProvider from './contexts/RmendProvider.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <UserProvider>
-      <MediaProvider>
-        <App />
-      </MediaProvider>
+      <RmendProvider>
+        <MediaProvider>
+          <App />
+        </MediaProvider>
+      </RmendProvider>
     </UserProvider>
   </React.StrictMode>,
 )

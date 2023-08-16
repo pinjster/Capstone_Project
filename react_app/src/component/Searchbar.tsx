@@ -11,10 +11,8 @@ export default function Searchbar() {
     async function submitSearch(e: FormEvent){
         e.preventDefault();
         resetMedias();
-        console.log(medias);
         const title = searchField.current!.value;
-        searchMoviesTvTitle(title)
-        console.log(medias);
+        searchMoviesTvTitle(title);
     }
 
     return (

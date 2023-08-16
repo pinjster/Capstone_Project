@@ -4,6 +4,9 @@ import { PiTelevisionSimpleFill } from "react-icons/pi"
 import { TbVinyl } from "react-icons/tb"
 import { FaGamepad } from "react-icons/fa"
 import { BiPodcast } from "react-icons/bi"
+import { NavLink } from "react-router-dom"
+import { useContext } from "react"
+import { MediaContext } from "../contexts/MediaProvider"
 
 interface Mediable {
     media: MediaType,
@@ -13,14 +16,17 @@ interface Mediable {
 
 function Media({ media, children }: Mediable) {
 
+    const { medias } = useContext(MediaContext)
+    const index = medias.findIndex((medias) => { return medias.mediaID === media.mediaID})
+
     return (
         <div className="media">
             <div className="media-display">
                 <div>
-                    <img src={ media.img } alt={media.title} className="media-img" />
+                    <NavLink to={`/media/${media.type}/${media.mediaID}/${index}`}><img src={ media.img } alt={media.title} className="media-img" /></NavLink> 
                 </div>
                 <div className="media-info">
-                    <h3>{ media.title } ({ media.year })</h3>
+                    <h3><NavLink className='media-title-link' to={`/media/${media.type}/${media.mediaID}/${index}`}>{ media.title } ({ media.year })</NavLink></h3>
                     <p>Type:
                         { media.type === 'movie' ? <MdLocalMovies className='media-type-icon' /> : '' }
                         { media.type === 'tv' ? <PiTelevisionSimpleFill className='media-type-icon' /> : '' }
@@ -30,7 +36,7 @@ function Media({ media, children }: Mediable) {
                     </p>
                     <p>Description: </p> 
                     <p className="media-description-indent">{ media.description }</p>
-                    <p>Genres: { media.genre.map((gen) => <span>#{gen} </span>) }</p>
+                    <p>Genres: { media.genre.map((gen, i) => <span key={i}>#{gen} </span>) }</p>
                 </div>
             </div> 
             { children }
