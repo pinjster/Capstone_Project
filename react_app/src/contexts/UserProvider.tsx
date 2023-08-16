@@ -9,7 +9,7 @@ interface UserContextValues {
 }
 
 export const UserContext = createContext({} as UserContextValues)
-export default function UserProvider({ children}: { children: JSX.Element | JSX.Element[] }) {
+export default function UserProvider({ children }: { children: JSX.Element | JSX.Element[] }) {
     const [user, setUser] = useState<CurrentUser>({username: '', accessToken: '', logged: false})
 
     const value = {

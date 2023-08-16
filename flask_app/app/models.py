@@ -21,6 +21,7 @@ follow_table = db.Table('follow_table',
 
 
 #USER: ID, username, email, password, joined, rmend relationship, vote relationship 
+#ADD FAVORITE GENRES, MOST RECOMMENDED 
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(50), nullable = False, unique = True)
@@ -201,7 +202,7 @@ class Rmend(db.Model):
             'total_likes' : self.totalLikes(),
         }
         return d
-    
+
     def commit(self):
         db.session.add(self)
         db.session.commit()

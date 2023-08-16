@@ -2,18 +2,22 @@ import { Typography } from '@mui/material';
 import StyledRating from '@mui/material/Rating';
 import Favorite from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { useState } from 'react';
-import { useRef } from "react";
+import { useState, useRef, FormEvent } from 'react';
 
-function AddRmendForm() {
+function RmendForm() {
     const bodyForm = useRef<HTMLInputElement>(null);
     const rmendForTitleForm = useRef<HTMLInputElement>(null);
     const rmendForTypeForm = useRef<HTMLSelectElement>(null);
+    const genreForm = useRef<HTMLInputElement>(null);
 
     const [rating, setRating ] = useState<number | null>(0)
 
+    function submitRmend(e: FormEvent){
+        e.preventDefault();
+    }
+
     return (
-        <form action="">
+        <form onSubmit={submitRmend}>
             <input type="text" ref={rmendForTitleForm} placeholder='What would you recommend this for?' />
             <fieldset>
                 <select ref={rmendForTypeForm} required>
@@ -41,9 +45,10 @@ function AddRmendForm() {
                   }}
                 />
             </div>
+            <input type="text" ref={genreForm} placeholder='Genre ie. #spooky, #scary' />
             <input type="submit" value="add rMEND" />
         </form>
   )
 }
 
-export default AddRmendForm;
+export default RmendForm;

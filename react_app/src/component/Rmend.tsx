@@ -1,5 +1,5 @@
 import { MediaType } from "../types"
-import AddRmendForm from "./AddRmendForm"
+import AddRmendForm from "./RmendForm"
 
 interface Rmendable {
     media: MediaType,
@@ -7,35 +7,37 @@ interface Rmendable {
     add?: boolean
 }
 
+// NEEEEEEEEEEEEEEEEEEEEEEEEDS FIXED SO BADDDDDDDDDDDDDDDDDD
+
 function Rmend({ media, edit, add }: Rmendable) {
 
     const movieURL = "https://image.tmdb.org/t/p/w500/"
 
 
 
-  return (
-    <div className="rmend">
-        <div className="rmend-display">
+    return (
+        <div className="rmend">
+            <div className="rmend-display">
+                <div>
+                    <img src={ movieURL + media.img } alt={media.title} className="rmend-img" />
+                </div>
+                <div className="rmend-info">
+                    <h3>{ media.title } ({ media.year })</h3>
+                    <p>Type: { media.type }</p>
+                    <p>Description: { media.description }</p>
+                    <p>Genres: { media.genre.map((gen) => <span>#{gen} </span>) }</p>
+                </div>
+            </div>    
             <div>
-                <img src={ movieURL + media.img } alt={media.title} className="rmend-img" />
+                { edit ? 
+                <form>
+                    <input type="button" value="Press Me" />
+                </form> : ''}
+                { add ? 
+                <AddRmendForm /> : ''
+                }
             </div>
-            <div className="rmend-info">
-                <h3>{ media.title } ({ media.year })</h3>
-                <p>Type: { media.type }</p>
-                <p>Description: { media.description }</p>
-                <p>Genres: { media.genre.map((gen) => <span>#{gen} </span>) }</p>
-            </div>
-        </div>    
-        <div>
-            { edit ? 
-            <form>
-                <input type="button" value="Press Me" />
-            </form> : ''}
-            { add ? 
-            <AddRmendForm /> : ''
-            }
         </div>
-    </div>
   )
 }
 

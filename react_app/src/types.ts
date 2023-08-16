@@ -13,7 +13,7 @@ export type MediaType = {
     type: string,
     description: string,
     img: string,
-    genre: number[],
+    genre: string[],
 }
 
 export type RmendType = {

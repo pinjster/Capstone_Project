@@ -51,6 +51,7 @@ def signup():
 
 @auth.route('/signout', methods = ['POST'])
 def signout():
+    
     response = jsonify({'msg' : 'signout successful'})
     return response, 200
 

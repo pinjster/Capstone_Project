@@ -1,5 +1,5 @@
 :root {
-  --main-bg-color: grey;
+  --main-bg-color: rgb(117, 117, 117);
   --rmend-bg-color: rgba(255, 255, 255, 0.658);
   --faded-white: rgba(214, 214, 214, 0.863);
   --dark-purple: rgb(17, 4, 17);
@@ -14,9 +14,33 @@ body {
   padding: 0;
   box-sizing: border-box;
   background-color: var(--main-bg-color);
+  font-family:Georgia, 'Times New Roman', Times, serif;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
-.rmend {
+ul {
+  list-style: none;
+}
+
+a {
+  color: var(--faded-white);
+  text-decoration: none;
+}
+
+.navbar-list {
+  position: sticky;
+  top: 0;
+  display: flex;
+  width: 100%;
+  padding: 1.3rem;
+  margin: 0 auto;
+  justify-content: space-evenly;
+  background-color: var(--dark-purple);
+  z-index: 1;
+}
+
+.media {
   margin: 0 auto 1.5rem auto;
   padding: 25px;
   min-width: 430px;
@@ -26,9 +50,17 @@ body {
   border-radius: 35px;
 }
 
-.rmend-display {
+.media-display {
   display: flex;
   flex-direction: row;
+}
+
+.media-type-icon {
+  color: var(--redness);
+  width: 25px;
+  height: 25px;
+  transform: translateY(0.5rem);
+  padding-left: 5px;
 }
 
 .rmend-button {
@@ -38,11 +70,15 @@ body {
   margin-right: 20px;
 }
 
-.rmend-img {
+.media-img {
   width:  11rem;
   height:  auto;
   aspect-ratio: 1 / 1.5;
   padding-right: 20px;
+}
+
+.media-description-indent {
+  text-indent: 2em;
 }
 
 div.stars {
