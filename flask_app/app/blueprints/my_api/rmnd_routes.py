@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models import User, Rmend
+from app.models import User, Rmend, Genre
 from . import bp_rmnd as rmnd
 
 @rmnd.post('/add-rmend')
@@ -141,3 +141,14 @@ def unlike_rmend(rmend_id):
 def media_rmends(type, id):
     rmends = Rmend.query.filter(Rmend.type == type, Rmend.media_id == id).all()
     return jsonify({ 'rmends': [rmend.to_dict() for rmend in rmends] }), 200
+
+@rmnd.get('/genre-rmends/<title>')
+def genre_rmends(title):
+    genre = Genre.query.filter_by(title = title).first()
+    if genre:
+        return jsonify({ 'rmends': [rmend.to_dict() for rmend in genre.rmends] }), 200
+    else:
+        return jsonify({
+            'success' : False,
+            'status' : 'genre does not exist'
+        }), 409

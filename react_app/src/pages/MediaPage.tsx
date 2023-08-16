@@ -13,7 +13,6 @@ function MediaPage() {
     const nav = useNavigate();
     
     useEffect(() => {
-      console.log(type, id, index);
       if(type && id && typeof index != 'undefined' && parseInt(index) >= 0){
         setThisMedia(medias[parseInt(index)]);
       } else if(typeof type != 'undefined' && typeof id != 'undefined'){

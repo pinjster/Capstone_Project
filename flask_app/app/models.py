@@ -157,7 +157,7 @@ class Rmend(db.Model):
         secondary = rmend_genre_table, 
         primaryjoin = ("Rmend.rmend_id==rmend_genre_table.c.rmend_id"),
         secondaryjoin = ("Genre.genre_id==rmend_genre_table.c.genre_id"),
-        back_populates = 'medias', 
+        back_populates = 'rmends',
         lazy = True
     )
 
@@ -182,14 +182,14 @@ class Rmend(db.Model):
     
     def handle_genres(self, genres):
         for genre in genres:
-            ng = Genre()
-            ng.title = genre
-            if not ng.is_duplicate():
+            dup = Genre.query.filter_by(title = genre).first()
+            if not dup:
+                ng = Genre()
+                ng.title = genre
                 ng.commit()
                 self.genres.append(ng)
             else:
-                og = Genre.query.filter_by(title = ng.title).first()
-                self.genres.append(og)
+                self.genres.append(dup)
 
     def to_dict(self):
         d = {
@@ -211,7 +211,7 @@ class Rmend(db.Model):
                 'for_type' : self.rmend_for_type,
             },
             'total_likes' : self.totalLikes(),
-            'genres': [genre for genre in self.genres]
+            'genres': [genre.title for genre in self.genres]
         }
         return d
 
@@ -244,14 +244,17 @@ class Rmend(db.Model):
 #GENRE
 class Genre(db.Model):
     genre_id = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String(), nullable = False)
-    medias = db.relationship('Rmend',
+    title = db.Column(db.String(), nullable = False, unique = True)
+    rmends = db.relationship('Rmend',
         secondary = rmend_genre_table,
         primaryjoin = ('Genre.genre_id==rmend_genre_table.c.genre_id'),
         secondaryjoin = ('Rmend.rmend_id==rmend_genre_table.c.rmend_id'),
         back_populates = 'genres',
         lazy = True
     )
+
+    def __repr__(self):
+        return self.title
 
     def commit(self):
         db.session.add(self)
@@ -261,11 +264,6 @@ class Genre(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def is_duplicate(self):
-        dup = Genre.query.filter_by(title = self.title).first()
-        if dup:
-            return True
-        return False
 
 
 

@@ -73,11 +73,11 @@ function MyProfilePage(){
 
         <h3>Your Followers:</h3>
         <ul>
-            { followers.map((user) => <p>{user}</p>) }
+            { followers.map((user, i) => <p key={i} >{user}</p>) }
         </ul>
         <h3>You're Following:</h3>
         <ul>
-            { following.map((user) => <p>{user}</p>) }
+            { following.map((user, i) => <p key={i} >{user}</p>) }
         </ul>
         <h3>Your rMENDS</h3>
         <ul>
