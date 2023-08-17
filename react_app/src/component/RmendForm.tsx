@@ -9,10 +9,11 @@ import { UserContext } from '../contexts/UserProvider';
 import { RmendContext } from '../contexts/RmendProvider';
 
 interface RmendFormable {
-    rmendFor: MediaType
+    rmendFor: MediaType,
+    addRmendToPage(rmend: RmendType): void
 }
 
-function RmendForm({ rmendFor }: RmendFormable) {
+function RmendForm({ rmendFor, addRmendToPage }: RmendFormable) {
     
         const { searchByTitle } = useContext(MediaContext)
         const { user } = useContext(UserContext)
@@ -35,22 +36,21 @@ function RmendForm({ rmendFor }: RmendFormable) {
             }
             const newRmend: RmendType = {
                 rmend_id: -1,
-                media: rmendFor,
+                media: mediaResult,
                 username: user.username,
                 body: bodyForm.current!.value,
                 userRating: rating,
                 dateAdded: '',
-                rmendForTitle: mediaResult.title,
-                rmendForType: mediaResult.type,
-                rmendForMediaId: mediaResult.mediaID,
+                rmendForTitle: rmendFor.title,
+                rmendForType: rmendFor.type,
+                rmendForMediaId: rmendFor.mediaID,
                 totalLikes: 0,
             }
-            console.log(newRmend);
             const response = await addRmend(newRmend);
             if(typeof response === 'number'){
-                console.log("IT WENNTTTTTTTT");
                 clearForms();
                 newRmend.rmend_id = response;
+                addRmendToPage(newRmend)
             } else if(typeof response === 'string'){
                 setMediaResult(response);
             }

@@ -58,6 +58,9 @@ function MediaPage() {
     }
   }
 
+  function addRmendToPage(rmend: RmendType){
+    setRmends([rmend, ...rmends])
+  }
 
   return (
     <Body navbar footer>
@@ -66,8 +69,8 @@ function MediaPage() {
         { thisMedia ? 
         <div>
           <Media media={thisMedia}></Media> 
-          <RmendForm rmendFor={thisMedia} />
-          { rmends.length > 0 ? rmends.map((rmend) => <Rmend rmend={rmend} /> ) 
+          <RmendForm rmendFor={thisMedia} addRmendToPage={addRmendToPage} />
+          { rmends.length > 0 ? rmends.map((rmend, i) => <Rmend key={i} rmend={rmend} /> ) 
           : <p>There are no Rmends for this yet.. </p> }
         </div>
           : <span /> }

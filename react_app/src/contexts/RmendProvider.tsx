@@ -66,10 +66,12 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
             if(res.ok){
                 const new_id = await res.json()
                 console.log(new_id);
-                if(typeof new_id.rmend_id === 'number')
-                return new_id.rmend_id
+                if(typeof new_id.rmend_id === 'number'){
+                    return new_id.rmend_id
+                }
             } else if(res.status === 409){
-                return res.statusText;
+                const error = await res.json()
+                return error.status;
             } else {
                 return 'Could Not upload rMEND'
             }
