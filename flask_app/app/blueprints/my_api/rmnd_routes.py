@@ -16,6 +16,7 @@ def add_rmend():
             if not new_rmend.is_duplicate():
                 new_rmend.commit()
                 new_rmend.handle_genres(info['genres'])
+                new_rmend.update_rmend()
                 return jsonify({
                     'success' : True,
                     'status' : 'rmend has been added',
