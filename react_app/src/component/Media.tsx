@@ -36,7 +36,7 @@ function Media({ media, children }: Mediable) {
                     </p>
                     <p>Description: </p> 
                     <p className="media-description-indent">{ media.description }</p>
-                    <p>Genres: { media.genre.map((gen, i) => <span key={i}>#{gen} </span>) }</p>
+                    <p>Genres: { media.genre.map((gen, i) => <span key={i}>#{gen.toLowerCase()} </span>) }</p>
                 </div>
             </div> 
             { children }

@@ -31,8 +31,15 @@ function MyProfilePage(){
             setFollowing(currUser.following);
             setFollowers(currUser.followers);
             setRmends(currUser.rmends);
-            console.log(currUser.rmends);
         }
+    }
+
+    function removeRmendFromPage(rmend: RmendType){
+        console.log(rmend.rmend_id);
+        const new_rmends = rmends.filter((eachRmend) => {
+            return eachRmend.rmend_id !== rmend.rmend_id 
+        })
+        setRmends(new_rmends)
     }
 
     useEffect(() => {
@@ -51,15 +58,15 @@ function MyProfilePage(){
         <h3>email: {u.email}</h3>
         <h3>Total Followers: <span>{u.followerCount}</span></h3>
         <ul>
-            { followers.map((user, i) => <p key={i} ><NavLink to={`/${user}/profile`} >{user}</NavLink></p>) }
+            { followers.map((user, i) => <li key={i} ><NavLink to={`/${user}/profile`} >{user}</NavLink></li>) }
         </ul>
         <h3>Total Following: <span>{u.followingCount}</span></h3>
         <ul>
-            { following.map((user, i) => <p key={i} ><NavLink to={`/${user}/profile`} >{user}</NavLink></p>) }
+            { following.map((user, i) => <li key={i} ><NavLink to={`/${user}/profile`} >{user}</NavLink></li>) }
         </ul>
         <h3>Your rMENDS</h3>
         <ul>
-            { rmends.map((rmend, i) => <p key={i} ><Rmend rmend={rmend} ></Rmend></p>) }
+            { rmends.map((rmend, i) => <li key={i} ><Rmend rmend={rmend} removeRmendFromPage={removeRmendFromPage} ></Rmend></li>) }
         </ul>
 
     </Body>

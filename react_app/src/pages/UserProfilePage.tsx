@@ -3,6 +3,7 @@ import { useParams, NavLink, useNavigate } from "react-router-dom"
 import { UserType } from "../types"
 import Body from "../component/Body"
 import { UserContext } from "../contexts/UserProvider"
+import Rmend from "../component/Rmend"
 
 function UserProfilePage() {
 
@@ -40,7 +41,7 @@ function UserProfilePage() {
                     <h3>email: {searchedUser.email}</h3>
                     <h3>Total Followers: <span>{searchedUser.followerCount}</span></h3>
                     <ul>
-                        { searchedUser.followers.map((user, i) => <p key={i} ><NavLink to={`/${user}/profile`} >{user}</NavLink></p>) }
+                        { searchedUser.followers.map((user, i) => <li key={i} ><NavLink to={`/${user}/profile`} >{user}</NavLink></li>) }
                     </ul>
                     <h3>Total Following: <span>{searchedUser.followingCount}</span></h3>
                     <ul>
@@ -48,7 +49,7 @@ function UserProfilePage() {
                     </ul>
                     <h3>{ searchedUser.username }'s rMENDS</h3>
                     <ul>
-                        { searchedUser.rmends.map((rmend, i) => <p key={i} >{rmend.body}</p>) }
+                    { searchedUser.rmends.map((rmend, i) => <li key={i} ><Rmend rmend={rmend} ></Rmend></li>) }
                     </ul>
                 </div>
             }

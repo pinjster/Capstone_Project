@@ -85,7 +85,7 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Bearer': user.accessToken,
+                    Authorization: `Bearer ${user.accessToken}`,
                 },
                 body: JSON.stringify({
                     rmend_id: rmend.rmend_id,
@@ -106,20 +106,22 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
     };
 
     const deleteRmend = async (rmend: RmendType) => {
-        const res = await fetch(`${baseAPI}/rmnd/delete-recommend/${rmend.rmend_id}`, {
+        if(user.logged){
+            const res = await fetch(`${baseAPI}/rmnd/delete-rmend/${rmend.rmend_id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Bearer': user.accessToken,
+                Authorization: `Bearer ${user.accessToken}`,
+                }
+            });
+            if(res.ok){
+                return 'ok'
+            } else if(res.status === 409){
+                return res.statusText
+            } else {
+                return 'bad'
             }
-        })
-        if(res.ok){
-            return 'ok'
-        } else if(res.status === 409){
-            return res.statusText
-        } else {
-            return 'bad'
-        }
+        }  
     };
 
     const likeRmend = async (rmend: RmendType) => {
@@ -127,7 +129,7 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Bearer': user.accessToken
+                Authorization: `Bearer ${user.accessToken}`,
             }
         })
         if(res.ok){
@@ -141,11 +143,11 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
     };
 
     const unlikeRmend = async (rmend: RmendType) => {
-        const res = await fetch(`${baseAPI}/rmnd/delete-recommend/${rmend.rmend_id}`, {
+        const res = await fetch(`${baseAPI}/rmnd/unlike/${rmend.rmend_id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Bearer': user.accessToken
+                Authorization: `Bearer ${user.accessToken}`,
             }
         });
         if(res.ok){

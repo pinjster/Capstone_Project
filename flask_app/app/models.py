@@ -133,7 +133,7 @@ class User(db.Model):
 class Rmend(db.Model):
     rmend_id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable = False)
-    user_rating = db.Column(db.Integer, nullable = True)
+    user_rating = db.Column(db.Numeric(2,1), nullable = True)
     title = db.Column(db.String(), nullable = False)
     body = db.Column(db.String(), nullable = True)
     media_id = db.Column(db.String(), nullable = False)

@@ -13,9 +13,9 @@ def add_rmend():
             new_rmend = Rmend()
             new_rmend.user_id = user.user_id
             new_rmend.from_dict(info)
-            new_rmend.handle_genres(info['genres'])
             if not new_rmend.is_duplicate():
                 new_rmend.commit()
+                new_rmend.handle_genres(info['genres'])
                 return jsonify({
                     'success' : True,
                     'status' : 'rmend has been added',

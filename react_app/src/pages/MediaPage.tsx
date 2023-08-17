@@ -62,6 +62,11 @@ function MediaPage() {
     setRmends([rmend, ...rmends])
   }
 
+  function removeRmendFromPage(rmend: RmendType){
+    console.log(rmend.rmend_id);
+    setRmends((rmends) => { return rmends.filter((eachRmend) => { eachRmend.rmend_id != rmend.rmend_id }) })
+  }
+
   return (
     <Body navbar footer>
         <h1>Media</h1>
@@ -70,7 +75,7 @@ function MediaPage() {
         <div>
           <Media media={thisMedia}></Media> 
           <RmendForm rmendFor={thisMedia} addRmendToPage={addRmendToPage} />
-          { rmends.length > 0 ? rmends.map((rmend, i) => <Rmend key={i} rmend={rmend} /> ) 
+          { rmends.length > 0 ? rmends.map((rmend, i) => <Rmend key={i} rmend={rmend} removeRmendFromPage={removeRmendFromPage} /> ) 
           : <p>There are no Rmends for this yet.. </p> }
         </div>
           : <span /> }

@@ -7,6 +7,7 @@ import { MediaType, RmendType } from '../types';
 import { MediaContext } from '../contexts/MediaProvider';
 import { UserContext } from '../contexts/UserProvider';
 import { RmendContext } from '../contexts/RmendProvider';
+import { BsSearch } from 'react-icons/bs'
 
 interface RmendFormable {
     rmendFor: MediaType,
@@ -103,7 +104,7 @@ function RmendForm({ rmendFor, addRmendToPage }: RmendFormable) {
                         </select>
                     </fieldset>
                 </div>
-                <button onClick={handleResults} >Search For</button>
+                <button onClick={handleResults} className='rmend-for-search-for-btn' ><BsSearch /></button>
             </div>
             <textarea ref={bodyForm} 
                 className="rmend-body-form" 
