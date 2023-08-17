@@ -39,20 +39,20 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
         }
     }
 
-    const addRmend = async (rmend: RmendType) => {
+    async function addRmend(rmend: RmendType) {
         if(user.logged){
             const res = await fetch(`${baseAPI}/rmnd/add-rmend`, {
                 method: 'POST',
                 headers: {
-                    'Content-type': 'application/json',
-                    'Bearer': user.accessToken,
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${user.accessToken}`,
                 },
                 body: JSON.stringify({
                     'user_rating': rmend.userRating,
                     'title': rmend.media.title,
                     'body': rmend.body,
-                    'media_id': rmend.rmend_id,
-                    'year': rmend.media.mediaID,
+                    'media_id': rmend.media.mediaID,
+                    'year': rmend.media.year,
                     'type': rmend.media.type,
                     'description': rmend.media.description,
                     'author': rmend.media.author,
@@ -63,7 +63,6 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
                     'genres': rmend.media.genre
                 })
             });
-            console.log(res);
             if(res.ok){
                 const new_id = await res.json()
                 console.log(new_id);

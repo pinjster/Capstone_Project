@@ -183,6 +183,7 @@ class Rmend(db.Model):
     
     def handle_genres(self, genres):
         for genre in genres:
+            genre = genre.lower()
             dup = Genre.query.filter_by(title = genre).first()
             if not dup:
                 ng = Genre()

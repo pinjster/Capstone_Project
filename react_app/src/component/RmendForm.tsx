@@ -30,6 +30,9 @@ function RmendForm({ rmendFor }: RmendFormable) {
     async function submitRmend(e: FormEvent){
         e.preventDefault();
         if(typeof mediaResult != 'string' && rating){
+            if(rmendFor.genre.length <= 0){
+                rmendFor.genre.push('')
+            }
             const newRmend: RmendType = {
                 rmend_id: -1,
                 media: rmendFor,
@@ -42,8 +45,10 @@ function RmendForm({ rmendFor }: RmendFormable) {
                 rmendForMediaId: mediaResult.mediaID,
                 totalLikes: 0,
             }
+            console.log(newRmend);
             const response = await addRmend(newRmend);
             if(typeof response === 'number'){
+                console.log("IT WENNTTTTTTTT");
                 clearForms();
                 newRmend.rmend_id = response;
             } else if(typeof response === 'string'){
@@ -77,13 +82,13 @@ function RmendForm({ rmendFor }: RmendFormable) {
 
     return (
         <form onSubmit={submitRmend} className='rmend-for-form' >
-            <h3>{ user.logged ? 'Write an rMEND' : 'Must be logged in to write rMEND' }</h3>
+            <h3>{ user.logged ? `Write an rMEND for ${rmendFor.title}` : 'Must be logged in to write rMEND' }</h3>
             { typeof mediaResult != 'string' ? <p>{ mediaResult.title } ({ mediaResult.year })</p> : mediaResult === '' ? '' : <p>{mediaResult}</p> }
             <div className='rmend-for-data'>
                 <div className='rmend-for-data-inputs'>
                     <input type="text" 
                         ref={rmendTitleForm} 
-                        placeholder='What would you recommend this for? (by title)' 
+                        placeholder='What would you recommend for this? (by title)' 
                         className='rmend-for-title-form'
                         readOnly={user.logged ? false: true }
                         disabled={user.logged ? false : true }
