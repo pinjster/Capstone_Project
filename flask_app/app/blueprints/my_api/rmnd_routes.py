@@ -60,6 +60,10 @@ def edit_rmend():
                 rmend.rmend_for_title = info['rmend_for_title']
             if 'rmend_for_type' in info:
                 rmend.rmend_for_type = info['rmend_for_type']
+            if 'rmend_for_media_id' in info:
+                rmend.rmend_for_media_id = info['rmend_for_media_id']
+            if 'genres' in info:
+                rmend.handle_genres(info['genres'])
             rmend.update_rmend()
             return jsonify({
                 'success' : True,
@@ -139,7 +143,7 @@ def unlike_rmend(rmend_id):
     
 @rmnd.get('/media-rmends/<type>/<id>')
 def media_rmends(type, id):
-    rmends = Rmend.query.filter(Rmend.type == type, Rmend.media_id == id).all()
+    rmends = Rmend.query.filter(Rmend.rmend_for_type == type, Rmend.rmend_for_media_id == id).all()
     return jsonify({ 'rmends': [rmend.to_dict() for rmend in rmends] }), 200
 
 @rmnd.get('/genre-rmends/<title>')

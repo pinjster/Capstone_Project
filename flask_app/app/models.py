@@ -145,7 +145,7 @@ class Rmend(db.Model):
     date_added = db.Column(db.DateTime, default = datetime.utcnow)
     rmend_for_title = db.Column(db.String(), nullable = True)
     rmend_for_type = db.Column(db.String(), nullable = True)
-    #rmend_for_media_id = db.Column(db.String(), nullable = True)
+    rmend_for_media_id = db.Column(db.String(), nullable = True)
     liked_by = db.relationship('User',
         secondary = all_likes, 
         primaryjoin = ('Rmend.rmend_id==all_likes.c.liked_rmend'), 
@@ -176,6 +176,7 @@ class Rmend(db.Model):
         self.img = d['img'] 
         self.rmend_for_title = d['rmend_for_title']
         self.rmend_for_type = d['rmend_for_type']
+        self.rmend_for_media_id = d['rmend_for_media_id']
 
     def totalLikes(self):
         return len(self.liked_by)
@@ -209,6 +210,7 @@ class Rmend(db.Model):
             'rmend_for' : {
                 'for_title' : self.rmend_for_title,
                 'for_type' : self.rmend_for_type,
+                'for_media_id': self.rmend_for_media_id,
             },
             'total_likes' : self.totalLikes(),
             'genres': [genre.title for genre in self.genres]
