@@ -6,7 +6,7 @@ interface MediaContextValues {
     medias: MediaType[],
     setMedias: Dispatch<SetStateAction<MediaType[]>>,
     resetMedias: () => void,
-    searchByMediaId: (type: string, id: number) => {},
+    searchByMediaId: (type: string, id: number) => Promise<MediaType | undefined>,
     searchMoviesTvTitle: (title :string) => {},
     getTvInfo: (id: number) => {},
     getMovieInfo: (id: number) => {},
@@ -22,7 +22,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         setMedias([])
     }
         //NEEDS FIXED I GUESS
-    const searchByMediaId = async (type: string, id: number) => {
+    const searchByMediaId = async (type: string, id: number): Promise<MediaType | undefined> => {
         if(type === 'movie'){
             const movie = await getMovieInfo(id);
             if(movie){

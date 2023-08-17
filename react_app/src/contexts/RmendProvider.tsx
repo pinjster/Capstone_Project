@@ -9,15 +9,35 @@ interface RmendContextValues {
     editRmend: (rmend: RmendType) => {},
     deleteRmend: (rmend: RmendType) => {},
     likeRmend: (rmend: RmendType) => {},
-    unlikeRmend: (rmend: RmendType) => {}
+    unlikeRmend: (rmend: RmendType) => {},
+    getRmends: (type: string, id: number) => Promise<RmendType[] | undefined>
 }
 
 export const RmendContext = createContext({} as RmendContextValues);
 export default function RmendProvider({ children }: { children: JSX.Element | JSX.Element[] }){
     
     const [rmends, setRmends] = useState<RmendType[]>([]);
-    const { user } = useContext(UserContext)
+    const { user, setRmend } = useContext(UserContext)
     const baseAPI = import.meta.env.VITE_APP_BASE_API
+
+    async function getRmends(type: string, id: number): Promise<RmendType[] | undefined> {
+        const res = await fetch(`${baseAPI}/rmnd/media-rmends/${type}/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if(res.ok){
+            const data = await res.json();
+            const allRmends: RmendType[] = [];
+            for(let rmend of data.rmends){
+                allRmends.push(setRmend(rmend));
+            }
+            return allRmends;
+        } else {
+            return undefined;
+        }
+    }
 
     const addRmend = async (rmend: RmendType) => {
         if(user.logged){
@@ -104,7 +124,8 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
             }
         })
         if(res.ok){
-            return 'ok'
+            const data = await res.json()
+            return data.rmend_id
         } else if(res.status === 409){
             return res.statusText
         } else {
@@ -136,7 +157,8 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
         editRmend,
         deleteRmend,
         likeRmend,
-        unlikeRmend
+        unlikeRmend,
+        getRmends
     }
 
     return (
