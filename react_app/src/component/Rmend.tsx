@@ -19,7 +19,7 @@ function Rmend({ rmend }: Rmendable) {
                 <div>
                     <NavLink to={`/media/${rmend.media.type}/${rmend.media.mediaID}`}>
                         <img src={ rmend.media.img } alt={rmend.media.title} className="rmend-img" />
-                        </NavLink>
+                    </NavLink>
                 </div>
                 <div className="rmend-info">
                     <h3><NavLink to={`/${rmend.username}/profile`}>

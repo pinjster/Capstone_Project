@@ -50,6 +50,7 @@ export default function UserProvider({ children }: { children: JSX.Element | JSX
             dateAdded: data.date_added,
             rmendForTitle: data.rmend_for.for_title || '',
             rmendForType: data.rmend_for.for_type || '',
+            rmendForMediaId: data.rmend_for.for_media_id || -1,
             totalLikes: data.total_likes,
         }
         return rmend

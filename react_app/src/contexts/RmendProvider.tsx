@@ -5,9 +5,9 @@ import { UserContext } from "./UserProvider";
 interface RmendContextValues {
     rmends: RmendType[] | RmendType,
     setRmends: Dispatch<SetStateAction<RmendType[]>>,
-    addRmend: (rmend: RmendType) => {},
-    editRmend: (rmend: RmendType) => {},
-    deleteRmend: (rmend: RmendType) => {},
+    addRmend: (rmend: RmendType) => Promise<any>,
+    editRmend: (rmend: RmendType) =>  Promise<string>,
+    deleteRmend: (rmend: RmendType) =>  Promise<string>,
     likeRmend: (rmend: RmendType) => {},
     unlikeRmend: (rmend: RmendType) => {},
     getRmends: (type: string, id: number) => Promise<RmendType[] | undefined>
@@ -44,7 +44,7 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
             const res = await fetch(`${baseAPI}/rmnd/add-rmend`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-type': 'application/json',
                     'Bearer': user.accessToken,
                 },
                 body: JSON.stringify({
@@ -59,16 +59,20 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
                     'img': rmend.media.img,
                     'rmend_for_title': rmend.rmendForTitle,
                     'rmend_for_type': rmend.rmendForType,
+                    'rmend_for_media_id': rmend.rmendForMediaId,
                     'genres': rmend.media.genre
                 })
             });
+            console.log(res);
             if(res.ok){
-
-                return 'ok'
+                const new_id = await res.json()
+                console.log(new_id);
+                if(typeof new_id.rmend_id === 'number')
+                return new_id.rmend_id
             } else if(res.status === 409){
                 return res.statusText;
             } else {
-                return 'bad'
+                return 'Could Not upload rMEND'
             }
         }
         return 'not logged in'
@@ -95,6 +99,8 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
             } else {
                 return 'bad'
             }
+        } else {
+            return 'not logged in'
         }
     };
 

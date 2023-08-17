@@ -8,8 +8,9 @@ interface MediaContextValues {
     resetMedias: () => void,
     searchByMediaId: (type: string, id: number) => Promise<MediaType | undefined>,
     searchMoviesTvTitle: (title :string) => {},
-    getTvInfo: (id: number) => {},
-    getMovieInfo: (id: number) => {},
+    getTvInfo: (id: number) => Promise<void | MediaType>,
+    getMovieInfo: (id: number) => Promise<void | MediaType>,
+    searchByTitle: (type: string, title: string) => Promise<MediaType | undefined>
 }
 
 export const MediaContext = createContext({} as MediaContextValues);
@@ -21,6 +22,28 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     const resetMedias = () => {
         setMedias([])
     }
+
+    async function searchByTitle(type: string, title: string) {
+        if(type === 'movie'){
+            const movie = await getMovieByTitle(title);
+            if(movie){
+                return movie
+            }
+        }else if(type === 'tv'){
+            const tv = await getTvByTitle(title);
+            if(tv){
+                return tv
+            }
+        }else if(type === 'album'){
+            return undefined
+        }else if(type === 'podcast'){
+            return undefined
+        }else if(type === 'game'){
+            return undefined
+        }
+        return undefined
+    }
+
         //NEEDS FIXED I GUESS
     const searchByMediaId = async (type: string, id: number): Promise<MediaType | undefined> => {
         if(type === 'movie'){
@@ -62,6 +85,24 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
                 }
             })
             .catch(console.error),[]
+    }
+
+    async function getMovieByTitle(title: string){
+        const result = await moviedb.searchMovie({ query: title });
+        if(typeof result.results != 'undefined' && result.results?.length > 0){
+            return await getMovieInfo(result.results[0]?.id!);
+        } else {
+            return undefined;
+        }
+    }
+
+    async function getTvByTitle(title: string){
+        const result = await moviedb.searchTv({ query: title });
+        if(typeof result.results != 'undefined'){
+            return await getTvInfo(result.results[0]?.id!);
+        } else {
+            return undefined;
+        }
     }
 
     const getTvInfo = (id: number) => {
@@ -128,6 +169,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         searchMoviesTvTitle,
         getMovieInfo,
         getTvInfo,
+        searchByTitle
     };
 
     return (

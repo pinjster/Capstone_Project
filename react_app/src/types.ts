@@ -22,10 +22,11 @@ export type RmendType = {
     media: MediaType,
     username: string,
     body: string,
-    userRating: string,
+    userRating: number,
     dateAdded: string,
     rmendForTitle?: string,
     rmendForType?: string,
+    rmendForMediaId?: number,
     totalLikes: number,
 }
 
