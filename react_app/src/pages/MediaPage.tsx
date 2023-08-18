@@ -69,7 +69,6 @@ function MediaPage() {
 
   return (
     <Body navbar footer>
-        <h1>Media</h1>
         <h3>{ error }</h3>
         { thisMedia ? 
         <div>

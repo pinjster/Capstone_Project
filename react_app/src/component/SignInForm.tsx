@@ -1,6 +1,6 @@
 import { FormEvent, useContext, useRef, useState } from "react";
 import { UserContext } from "../contexts/UserProvider";
-import { useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 
 function SignInForm() {
     const { setUser } = useContext(UserContext);
@@ -30,7 +30,7 @@ function SignInForm() {
             resetFields();
             nav('/my-profile')
         }else if (response.status === 409){
-            setErrorMessage(response.statusText),[errorMessage] // DOES NOT FUNCTION AS INTENDED
+            setErrorMessage(response.statusText)
         } else {
             window.alert("Call failed");
         }
@@ -53,12 +53,15 @@ function SignInForm() {
 
     return (
         <form onSubmit={handleSignIn} className="auth-form">
+            <h3>Sign in here!</h3>
+            <p>Don't have an account? Sign up <NavLink to={'/sign-up'}>here</NavLink></p>
+            <p className="error">{errorMessage}</p>
             <label >Username:</label>
-            <input type="text" ref={usernameField} placeholder="Username" />
-            <label >Password</label>
-            <input type="password" ref={passwordField} placeholder="Password" />
+            <input type="text" ref={usernameField} placeholder="Username" required/>
+            <label >Password:</label>
+            <input type="password" ref={passwordField} placeholder="Password" required/>
             <label >{ errorMessage }</label>
-            <input type="submit" value="Sign In" />
+            <input type="submit" value="Sign In" className="auth-submit-btn" />
         </form>
   )
 }

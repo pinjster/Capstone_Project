@@ -1,10 +1,5 @@
 import { NavLink } from "react-router-dom"
 import { RmendType } from "../types"
-import { MdLocalMovies } from "react-icons/md"
-import { PiTelevisionSimpleFill } from "react-icons/pi"
-import { TbVinyl } from "react-icons/tb"
-import { FaGamepad } from "react-icons/fa"
-import { BiPodcast } from "react-icons/bi"
 import { FormEvent, useContext, useState } from "react"
 import { UserContext } from "../contexts/UserProvider"
 import { RmendContext } from "../contexts/RmendProvider"
@@ -12,6 +7,7 @@ import { GoTrash } from "react-icons/go"
 import StyledRating from '@mui/material/Rating';
 import Favorite from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import MediaTypeIcon from "./MediaTypeIcon"
 
 interface Rmendable {
     rmend: RmendType,
@@ -50,18 +46,10 @@ function Rmend({ rmend, removeRmendFromPage }: Rmendable) {
                         </NavLink>  <span> rMENDS </span>
                         <NavLink to={`/media/${rmend.media.type}/${rmend.media.mediaID}`} >
                             <span>{ rmend.media.title } ({ rmend.media.year })</span>
-                        </NavLink>
+                        </NavLink> <span><MediaTypeIcon type={rmend.media.type} /></span>
                     </h3>
-                    <h4>for <NavLink to={`/media/${rmend.rmendForType}/${rmend.rmendForMediaId}`}>{ rmend.rmendForTitle }</NavLink></h4>
-                    <p>Type:
-                        { rmend.media.type === 'movie' ? <MdLocalMovies className='media-type-icon' /> : '' }
-                        { rmend.media.type === 'tv' ? <PiTelevisionSimpleFill className='media-type-icon' /> : '' }
-                        { rmend.media.type === 'album' ? <TbVinyl className='media-type-icon' /> : '' }
-                        { rmend.media.type === 'game' ? <FaGamepad className='media-type-icon' /> : '' }
-                        { rmend.media.type === 'podcast' ? <BiPodcast className='media-type-icon' /> : '' }
-                    </p>
+                    <h4>for <NavLink  className='rmend-for-movie-title' to={`/media/${rmend.rmendForType}/${rmend.rmendForMediaId}`}>{ rmend.rmendForTitle }</NavLink> <MediaTypeIcon type={rmend.rmendForType} /> </h4>
                     <p> "{ rmend.body }" </p>
-                    <p>Rating: { rmend.userRating }/5</p>
                     <StyledRating
                         name="customized-color"
                         defaultValue={2}
@@ -72,7 +60,7 @@ function Rmend({ rmend, removeRmendFromPage }: Rmendable) {
                         value={Number(rmend.userRating)}
                         readOnly={true}
                     />
-                    <p>Genres: { rmend.media.genre.map((genre, i) => <span key={i} >#{genre.toLowerCase()} </span>) }</p>
+                    <p>Genres: { rmend.media.genre.map((genre, i) => <span key={i} className="genre" >#{genre.toLowerCase()} </span>) }</p>
                     <p className="error">{ error }</p>
                 </div>
                 <div className="rmend-delete-btn">

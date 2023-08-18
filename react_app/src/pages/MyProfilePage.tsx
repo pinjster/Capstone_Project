@@ -52,22 +52,23 @@ function MyProfilePage(){
 
     return (
     <Body navbar footer>
-        <h1>Your Profile</h1>
-        <h3>Username: {user.username}</h3>
-        <h3>email: {u.email}</h3>
-        <h3>Total Followers: <span>{u.followerCount}</span></h3>
-        <ul>
-            { followers.map((user, i) => <li key={i} ><NavLink to={`/${user}/profile`} >{user}</NavLink></li>) }
-        </ul>
-        <h3>Total Following: <span>{u.followingCount}</span></h3>
-        <ul>
-            { following.map((user, i) => <li key={i} ><NavLink to={`/${user}/profile`} >{user}</NavLink></li>) }
-        </ul>
-        <h3>Your rMENDS</h3>
-        <ul>
-            { rmends.map((rmend, i) => <li key={i} ><Rmend rmend={rmend} removeRmendFromPage={removeRmendFromPage} ></Rmend></li>) }
-        </ul>
-
+        <div className="user-profile">
+            <h1>Your Profile</h1>
+            <h3>Username: {user.username}</h3>
+            <h3>email: {u.email}</h3>
+            <h3>Total Followers: <span>{u.followerCount}</span></h3>
+            <ul>
+                { followers.map((user, i) => <li key={i} ><NavLink to={`/${user}/profile`} >{user}</NavLink></li>) }
+            </ul>
+            <h3>Total Following: <span>{u.followingCount}</span></h3>
+            <ul>
+                { following.map((user, i) => <li key={i} ><NavLink to={`/${user}/profile`} >{user}</NavLink></li>) }
+            </ul>
+            <h3>Your rMENDS ({u.rmends.length}) </h3>
+            <ul className="user-rmends">
+                { rmends.map((rmend, i) => <li key={i} ><Rmend rmend={rmend} removeRmendFromPage={removeRmendFromPage} ></Rmend></li>) }
+            </ul>
+        </div>
     </Body>
   )
 }

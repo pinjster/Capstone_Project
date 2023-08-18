@@ -12,7 +12,9 @@ export default function Body({navbar, footer, children}: BodyProps) {
     return (
         <div className="body-component">
             { navbar && <Navbar />}
-            {children}
+            <div className="body-children">
+                {children}
+            </div>
             { footer && <Footer /> }
         </div>
     )

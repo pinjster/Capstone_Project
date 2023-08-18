@@ -1,6 +1,6 @@
 import { FormEvent, useContext, useRef, useState } from "react";
 import { UserContext } from "../contexts/UserProvider";
-import { useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 
 function SignUpForm() {
     const { setUser } = useContext(UserContext);
@@ -28,7 +28,7 @@ function SignUpForm() {
         });
         if(response.ok){
             const data = await response.json();
-            establishUser(usernameField.current!.value, data.access_token);
+            establishUser(usernameField.current!.value, data.access_token); //VALIDATE EMAIL
             resetFields();
             nav('/')
         }else if (response.status == 409){
@@ -55,14 +55,16 @@ function SignUpForm() {
 
     return (
         <form onSubmit={handleSignIn} className="auth-form">
+            <h3>Sign up here!</h3>
+            <p>Already have an account? Sign in <NavLink to={'/sign-in'}>here</NavLink></p>
             <label >Username:</label>
-            <input type="text" ref={usernameField} placeholder="Username" />
+            <input type="text" ref={usernameField} placeholder="Username" required />
             <label >Email:</label>
-            <input type="text" ref={emailField} placeholder="Email" />
+            <input type="text" ref={emailField} placeholder="Email" required  />
             <label >Password</label>
-            <input type="password" ref={passwordField} placeholder="Password" />
+            <input type="password" ref={passwordField} placeholder="Password" required />
             <label >{ errorMessage }</label>
-            <input type="submit" value="Sign Up" />
+            <input type="submit" value="Sign Up" className="auth-submit-btn" />
         </form>
   )
 }

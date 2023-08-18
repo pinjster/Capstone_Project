@@ -1,23 +1,34 @@
 :root {
-  --main-bg-color: rgb(117, 117, 117);
-  --rmend-bg-color: rgba(255, 255, 255, 0.658);
-  --faded-white: rgba(214, 214, 214, 0.863);
-  --dark-purple: rgb(26, 3, 26);
-  --dark-grey: rgb(29, 29, 29);
-  --blackish: rgb(14, 14, 14);
-  --rich-green: rgb(0, 48, 4);
+  --night: rgba(15, 14, 14);
+  --claret: rgba(123, 8, 40);
+  --violet: rgba(82, 43, 71);
+  --cam-blue: rgb(141, 170, 157);
+  --snow: rgb(251, 245, 243);
+  --chocolate: rgb(69, 11, 27);
+  --tyrian: rgb(103, 26, 56);
   --redness: rgb(141, 1, 1);
-  --deep-blue: rgb(13, 1, 46);
+  --ash: rgb(169, 189, 179);
+  --tan: rgb(243, 194, 104);
+  --transparent: rgba(255, 0, 0, 0);
 }
 
 body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: var(--main-bg-color);
+  background-color: var(--night);
+  background: linear-gradient( var(--night) 50vh, 83%, var(--violet));
   font-family:Georgia, 'Times New Roman', Times, serif;
   overflow-x: hidden;
   overflow-y: scroll;
+  color: var(--snow);
+  text-shadow: var(--night) -1px 1px 1px 19px;
+  letter-spacing: .2px;
+  word-spacing: 3px;
+}
+
+.body-children {
+  min-height: 95vh;
 }
 
 ul {
@@ -29,6 +40,10 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
 .navbar-list {
   position: sticky;
   top: 0;
@@ -37,8 +52,12 @@ a {
   padding: 1.3rem;
   margin: 0 auto;
   justify-content: space-evenly;
-  background-color: var(--dark-purple);
+  background-color: var(--violet);
   z-index: 1;
+}
+
+.navbar-list > a:hover {
+  text-decoration: none;
 }
 
 .media {
@@ -46,9 +65,15 @@ a {
   padding: 25px;
   min-width: 430px;
   max-width: 70%;
-  background-color: var(--faded-white);
-  color: var(--blackish);
+  background-color: var(--cam-blue);
+  color: var(--snow);
   border-radius: 35px;
+  box-shadow: var(--tyrian) 0px 4px 6px 2px;
+  border-color: var(--chocolate);
+}
+
+.genre {
+  text-decoration: underline;
 }
 
 .media-display {
@@ -57,7 +82,7 @@ a {
 }
 
 .media-type-icon {
-  color: var(--redness);
+  color: var(--claret);
   width: 25px;
   height: 25px;
   transform: translateY(0.5rem);
@@ -79,7 +104,7 @@ a {
 }
 
 .media-title-link {
-  color: var(--dark-purple);
+  color: var(--tan);
 }
 
 .media-description-indent {
@@ -122,13 +147,13 @@ label.star:before {
 }
 
 .rmend {
-  background-color: var(--dark-grey);
+  background-color: var(--ash);
   padding: 20px;
   margin: 0 auto 1.5rem auto;
   padding: 25px;
   min-width: 430px;
   max-width: 70%;
-  color: var(--faded-white);
+  color: var(--chocolate);
   border-radius: 35px;
   display: flex;
   flex-direction: column;
@@ -148,7 +173,6 @@ label.star:before {
 }
 
 .rmend-info {
-  background-color: var(--dark-grey);
   width: 100%;
 }
 
@@ -159,32 +183,36 @@ label.star:before {
 }
 
 .rmend-delete-btn {
-  background-color: var(none);
   display: flex;
   justify-items: right;
 }
 
 .rmend-for-form {
-  background-color: var(--dark-grey);
+  background-color: var(--tan);
   padding: 20px;
   margin: 0 auto 1.5rem auto;
   padding: 25px;
   min-width: 430px;
   max-width: 70%;
-  color: var(--faded-white);
+  color: var(--chocolate);
   border-radius: 35px;
   display: flex;
   flex-direction: column;
 }
 
+.rmend-for-movie-title {
+  font-style: italic;
+}
+
 .rmend-for-title-form{
-  background-color: var(--deep-blue);
+  background-color: var(--claret);
   padding: 8px 10px;
   border-radius: 15rem;
   border-style: none;
   width: 100%;
   min-width: 280px;
-  color: var(--faded-white);
+  color: var(--snow);
+  inline-size: 15px;
 }
 
 .rmend-for-fieldset-form{
@@ -193,7 +221,7 @@ label.star:before {
   padding: 0px;
   margin: 0px;
   border-style: none;
-  color: var(--faded-white);
+  color: var(--snow);
 }
 
 .rmend-for-data {
@@ -214,7 +242,7 @@ label.star:before {
 
 .rmend-for-data-inputs {
   display: flex;
-  background-color: var(--deep-blue);
+  background-color: var(--claret);
   border-radius: 15rem;
 }
 
@@ -225,7 +253,7 @@ label.star:before {
 }
 
 .rmend-for-fieldset-select {
-  background-color: var(--deep-blue);
+  background-color: var(--claret);
   padding: 20px;
   border-radius: 15rem;
   border-style: none;
@@ -240,21 +268,25 @@ label.star:before {
   padding: 12px 20px;
   margin: 1rem 0rem 1.8rem 0rem;
   box-sizing: border-box;
-  background-color: #f8f8f8;
+  background-color: var(--chocolate);
   resize: none;
   color: var(--blackish);
   border-radius: 2rem;
 }
 
 .rmend-for-genre-form {
-  background-color: var(--rmend-bg-color);
-  padding: 8px 5px;
-  padding-right: 18rem ;
+  background-color: var(--chocolate);
+  color: var(--snow);
+  padding: 15px 5px;
+  padding-right: 1rem ;
+  width: 27rem;
   margin-bottom: 10px;
+  border-radius: 15rem;
 }
 
 .rmend-for-submit-form {
-  background-color: var(--faded-white);
+  background-color: var(--night);
+  color: var(--snow);
   justify-self: baseline;
   height: fit-content;
   margin: 2.5rem 1rem 1rem 1rem;
@@ -265,4 +297,85 @@ label.star:before {
 
 .error {
   color: var(--redness);
+}
+
+
+.auth-form {
+  border-top-left-radius: 5rem;
+  border-top-right-radius: 5rem;
+  background: linear-gradient(var(--violet), 50%, var(--transparent) 85%);
+  padding: 80px 20px 30px 20px; 
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  margin-top: 20vh;
+  width: 30%;
+}
+
+.auth-form > input {
+  margin-bottom: 20px;
+  margin-top: 5px;
+  border-radius: 15rem;
+  padding: 5px 0;
+  padding-left: 10px;
+}
+
+.auth-form input:last-child {
+  width: 40%;
+  margin: 0 auto;
+  padding: 20px 40px;
+  border-radius: 15rem;
+  border-style:inset;
+}
+
+.main-page-headers {
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 6vh;
+}
+
+.main-searchbar {
+  display: flex;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4rem;
+}
+
+.main-page-h1 {
+  margin-top: 12vh;
+}
+
+.main-page-results {
+  margin-bottom: 9rem;
+}
+
+.footer-component {
+  display: flex;
+  justify-content: space-around;
+  width: 95%;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+}
+
+
+.user-profile {
+  background: linear-gradient(var(--violet), 50%, var(--transparent) 85%);
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 4rem;
+  padding: 1rem 1rem 1rem 1rem;
+  border-radius: 5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-profile h1:first-child {
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+.user-rmends {
+  width: 100%;
 }

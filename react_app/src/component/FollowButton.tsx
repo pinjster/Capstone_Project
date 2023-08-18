@@ -38,9 +38,9 @@ function FollowButton({ selectUser }: Followable) {
     },[selectUser])
 
   return (
-    <div>
+    <span>
         { user.username === selectUser ? <span /> : user.logged ? <button onClick={handleFollowing} >{ follow }</button> : <span /> }
-    </div>
+    </span>
   )
 }
 

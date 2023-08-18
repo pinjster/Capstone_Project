@@ -39,7 +39,7 @@ function UserProfilePage() {
     return (
         <Body navbar footer>
             {typeof searchedUser == 'undefined' ? <p>user does not exist</p> : 
-                <div>
+                <div className="user-profile">
                     <h1>{ searchedUser.username }'s Page <span> <FollowButton selectUser={searchedUser.username} /> </span> </h1> 
                     <h3>email: {searchedUser.email}</h3>
                     <h3>Total Followers: <span>{searchedUser.followerCount}</span></h3>
@@ -51,7 +51,7 @@ function UserProfilePage() {
                         { searchedUser.following.map((user, i) => <li key={i} ><NavLink to={`/${user}/profile`} >{user}</NavLink></li>) }
                     </ul>
                     <h3>{ searchedUser.username }'s rMENDS</h3>
-                    <ul>
+                    <ul className="user-rmends" >
                     { searchedUser.rmends.map((rmend, i) => <li key={i} ><Rmend rmend={rmend} ></Rmend></li>) }
                     </ul>
                 </div>
