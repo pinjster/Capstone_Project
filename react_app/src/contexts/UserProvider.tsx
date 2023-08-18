@@ -20,7 +20,7 @@ export default function UserProvider({ children }: { children: JSX.Element | JSX
     const [user, setUser] = useState<CurrentUser>({username: '', accessToken: '', logged: false})
     const [following, setFollowing] = useState<string[]>([])
     
-    const baseAPI: string = import.meta.env.VITE_APP_BASE_API
+    const baseAPI = import.meta.env.VITE_APP_BASE_API
 
     const value = {
         user,
@@ -65,7 +65,6 @@ export default function UserProvider({ children }: { children: JSX.Element | JSX
     async function getUserProfile(username: string): Promise<UserType | undefined> {
         const res = await fetch(`${baseAPI}/user/profile/${username}`,{
             method: 'GET',
-            mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -101,12 +100,15 @@ export default function UserProvider({ children }: { children: JSX.Element | JSX
     }
 
     async function followUser(username: string): Promise<string> {
-        const res = await fetch(`${baseAPI}/user/follow/${username}`,{
-            method: 'GET', 
+        const res = await fetch(`${baseAPI}/user/follow`,{
+            method: 'POST', 
             headers: {
                 'Content-Type': 'application/json',
-                'Authentication': `Bearer ${user.accessToken}`,
-            }
+                'Authorization': `Bearer ${user.accessToken}`,
+            },
+            body: JSON.stringify({
+                username: username,
+            })
         });
         if(res.ok){
             return 'ok';
@@ -122,7 +124,7 @@ export default function UserProvider({ children }: { children: JSX.Element | JSX
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authentication': `Bearer ${user.accessToken}`,
+                'Authorization': `Bearer ${user.accessToken}`,
             }
         });
         if(res.ok){

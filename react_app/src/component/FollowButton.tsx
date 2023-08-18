@@ -35,7 +35,7 @@ function FollowButton({ selectUser }: Followable) {
         } else {
             setFollow('follow')
         }
-    },[])
+    },[selectUser])
 
   return (
     <div>

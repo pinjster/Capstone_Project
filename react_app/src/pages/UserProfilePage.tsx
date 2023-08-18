@@ -34,7 +34,7 @@ function UserProfilePage() {
         if(typeof username != 'undefined'){
             UserProfile(username);
         }
-    },[])
+    },[username])
 
     return (
         <Body navbar footer>
