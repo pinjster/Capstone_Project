@@ -6,9 +6,11 @@ import { CurrentUser, RmendType, UserType } from "../types"
 interface UserContextValues {
     user: CurrentUser,
     setUser:  Dispatch<SetStateAction<CurrentUser>>,
+    following: string[],
+    setFollowing: Dispatch<SetStateAction<string[]>>,
     getUserProfile: (username:string) => Promise<UserType | undefined>,
-    followUser: (username: string) => {},
-    unfollowUser: (username: string) => {},
+    followUser: (username: string) => Promise<string>,
+    unfollowUser: (username: string) => Promise<string>,
     setRmend: (data: any) => RmendType
 }
 
@@ -16,11 +18,15 @@ export const UserContext = createContext({} as UserContextValues)
 export default function UserProvider({ children }: { children: JSX.Element | JSX.Element[] }) {
     
     const [user, setUser] = useState<CurrentUser>({username: '', accessToken: '', logged: false})
-    const baseAPI = import.meta.env.VITE_APP_BASE_API
+    const [following, setFollowing] = useState<string[]>([])
+    
+    const baseAPI: string = import.meta.env.VITE_APP_BASE_API
 
     const value = {
         user,
         setUser,
+        following,
+        setFollowing,
         getUserProfile,
         followUser,
         unfollowUser,
@@ -59,8 +65,9 @@ export default function UserProvider({ children }: { children: JSX.Element | JSX
     async function getUserProfile(username: string): Promise<UserType | undefined> {
         const res = await fetch(`${baseAPI}/user/profile/${username}`,{
             method: 'GET',
+            mode: 'cors',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             }
         })
         if(res.ok){
@@ -93,14 +100,14 @@ export default function UserProvider({ children }: { children: JSX.Element | JSX
         }
     }
 
-    async function followUser(username: string){
+    async function followUser(username: string): Promise<string> {
         const res = await fetch(`${baseAPI}/user/follow/${username}`,{
-            method: 'GET',
+            method: 'GET', 
             headers: {
                 'Content-Type': 'application/json',
-                'Bearer': user.accessToken,
+                'Authentication': `Bearer ${user.accessToken}`,
             }
-        })
+        });
         if(res.ok){
             return 'ok';
         } else if(res.status === 409) {
@@ -110,14 +117,14 @@ export default function UserProvider({ children }: { children: JSX.Element | JSX
         }
     }
 
-    async function unfollowUser(username: string){
+    async function unfollowUser(username: string): Promise<string> {
         const res = await fetch(`${baseAPI}/user/unfollow/${username}`,{
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Bearer': user.accessToken,
+                'Authentication': `Bearer ${user.accessToken}`,
             }
-        })
+        });
         if(res.ok){
             return 'ok';
         } else if(res.status === 409) {

@@ -69,14 +69,14 @@ function Rmend({ rmend, removeRmendFromPage }: Rmendable) {
                         precision={0.5}
                         icon={<Favorite fontSize="inherit" htmlColor='palevioletred' />}
                         emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
-                        value={rmend.userRating}
+                        value={Number(rmend.userRating)}
                         readOnly={true}
                     />
                     <p>Genres: { rmend.media.genre.map((genre, i) => <span key={i} >#{genre.toLowerCase()} </span>) }</p>
+                    <p className="error">{ error }</p>
                 </div>
                 <div className="rmend-delete-btn">
                     { user.username === rmend.username ? <button onClick={handleDeleteRmend} className="rmend-trash-btn" ><GoTrash /></button> : <span /> }
-                    <p>{ error }</p>
                 </div>
             </div>    
         </div>

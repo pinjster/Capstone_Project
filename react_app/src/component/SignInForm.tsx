@@ -28,7 +28,7 @@ function SignInForm() {
             const data = await response.json();
             establishUser(usernameField.current!.value, data.access_token);
             resetFields();
-            nav('/')
+            nav('/my-profile')
         }else if (response.status === 409){
             setErrorMessage(response.statusText),[errorMessage] // DOES NOT FUNCTION AS INTENDED
         } else {

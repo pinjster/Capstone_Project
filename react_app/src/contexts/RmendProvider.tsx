@@ -121,7 +121,9 @@ export default function RmendProvider({ children }: { children: JSX.Element | JS
             } else {
                 return 'bad'
             }
-        }  
+        } else {
+            return 'not logged in'
+        }
     };
 
     const likeRmend = async (rmend: RmendType) => {

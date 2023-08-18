@@ -84,7 +84,6 @@ function RmendForm({ rmendFor, addRmendToPage }: RmendFormable) {
     return (
         <form onSubmit={submitRmend} className='rmend-for-form' >
             <h3>{ user.logged ? `Write an rMEND for ${rmendFor.title}` : 'Must be logged in to write rMEND' }</h3>
-            { typeof mediaResult != 'string' ? <p>{ mediaResult.title } ({ mediaResult.year })</p> : mediaResult === '' ? '' : <p>{mediaResult}</p> }
             <div className='rmend-for-data'>
                 <div className='rmend-for-data-inputs'>
                     <input type="text" 
@@ -106,6 +105,7 @@ function RmendForm({ rmendFor, addRmendToPage }: RmendFormable) {
                 </div>
                 <button onClick={handleResults} className='rmend-for-search-for-btn' ><BsSearch /></button>
             </div>
+            { typeof mediaResult != 'string' ? <p>{ mediaResult.title } ({ mediaResult.year })</p> : mediaResult === '' ? '' : <p>{mediaResult}</p> }
             <textarea ref={bodyForm} 
                 className="rmend-body-form" 
                 placeholder='Why would you recommend it?'

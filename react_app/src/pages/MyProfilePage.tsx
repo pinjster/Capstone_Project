@@ -8,8 +8,7 @@ import { RmendType, UserType } from "../types";
 
 function MyProfilePage(){
   
-    const { user, getUserProfile } = useContext(UserContext);
-    const [ following, setFollowing ] = useState<string[]>([])
+    const { user, getUserProfile, following, setFollowing } = useContext(UserContext);
     const [ followers, setFollowers ] = useState<string[]>([])
     const [ rmends, setRmends ] = useState<RmendType[]>([])
     const [ u, setU ] = useState<UserType>({

@@ -1,5 +1,5 @@
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask import jsonify
+from flask import jsonify, request
 from app.models import User
 from . import bp_user as user
 
@@ -15,9 +15,11 @@ def user_profile(username):
         }), 409
 
 
-@user.get('/follow/<username>')
+@user.post('/follow')
 @jwt_required()
-def follow_user(username):
+def follow_user():
+    data = request.json
+    username = data['username']
     curr = User.query.filter_by(username = get_jwt_identity()).first()
     if curr.follow_user(username):
         return jsonify({

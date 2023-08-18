@@ -4,6 +4,7 @@ import { UserType } from "../types"
 import Body from "../component/Body"
 import { UserContext } from "../contexts/UserProvider"
 import Rmend from "../component/Rmend"
+import FollowButton from "../component/FollowButton"
 
 function UserProfilePage() {
 
@@ -18,6 +19,8 @@ function UserProfilePage() {
             setSearchedUser((user) => { return user = u})
         }
     }
+
+
 
     useEffect(() => {
         if(typeof username != 'undefined'){
@@ -37,7 +40,7 @@ function UserProfilePage() {
         <Body navbar footer>
             {typeof searchedUser == 'undefined' ? <p>user does not exist</p> : 
                 <div>
-                    <h1>{ searchedUser.username }'s Page</h1>
+                    <h1>{ searchedUser.username }'s Page <span> <FollowButton selectUser={searchedUser.username} /> </span> </h1> 
                     <h3>email: {searchedUser.email}</h3>
                     <h3>Total Followers: <span>{searchedUser.followerCount}</span></h3>
                     <ul>

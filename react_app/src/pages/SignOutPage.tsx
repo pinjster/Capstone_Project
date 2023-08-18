@@ -5,7 +5,7 @@ import Body from "../component/Body"
 
 function SignOutPage() {
 
-  const { setUser } = useContext(UserContext)
+  const { setUser, setFollowing } = useContext(UserContext)
   const nav = useNavigate()
 
   useEffect(() => {
@@ -14,6 +14,7 @@ function SignOutPage() {
       username: '',
       accessToken: ''
     });
+    setFollowing([]);
     localStorage.removeItem("localUser");
     localStorage.removeItem("localToken");
     nav('/');
