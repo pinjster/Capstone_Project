@@ -194,7 +194,7 @@ label.star:before {
   padding: 25px;
   min-width: 430px;
   max-width: 70%;
-  color: var(--chocolate);
+  color: var(--snow);
   border-radius: 35px;
   display: flex;
   flex-direction: column;
@@ -229,6 +229,7 @@ label.star:before {
   flex-direction: row;
   width: 100%;
   margin: 0 auto;
+  color: var(--snow);
 }
 
 .rmend-for-search-for-btn {
@@ -244,6 +245,7 @@ label.star:before {
   display: flex;
   background-color: var(--claret);
   border-radius: 15rem;
+  color: var(--snow);
 }
 
 .rmend-for-reasons {
@@ -257,12 +259,11 @@ label.star:before {
   padding: 20px;
   border-radius: 15rem;
   border-style: none;
-  color: var(--faded-white);
+  color: var(--snow);
   margin: 0 1rem;
 }
 
 .rmend-body-form {
-  background-color: var(--faded-white);
   width: 100%;
   height: 150px;
   padding: 12px 20px;

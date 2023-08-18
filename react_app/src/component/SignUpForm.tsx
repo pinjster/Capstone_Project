@@ -1,12 +1,17 @@
 import { FormEvent, useContext, useRef, useState } from "react";
 import { UserContext } from "../contexts/UserProvider";
 import { NavLink, useNavigate } from "react-router-dom"
+import { AuthContext } from "../contexts/AuthProvider";
 
 function SignUpForm() {
+    
     const { setUser } = useContext(UserContext);
+    const { authSignUp } = useContext(AuthContext)
+
     const usernameField = useRef<HTMLInputElement>(null);
     const emailField = useRef<HTMLInputElement>(null);
     const passwordField = useRef<HTMLInputElement>(null);
+
     const [ errorMessage, setErrorMessage ] = useState('');
     const nav = useNavigate()
 
@@ -15,27 +20,34 @@ function SignUpForm() {
 
     async function handleSignIn(e: FormEvent){
         e.preventDefault();
-        const response = await fetch(`${baseURL}/auth/signup`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: usernameField.current!.value,
-                email: emailField.current!.value,
-                password: passwordField.current!.value,
-            })
-        });
-        if(response.ok){
-            const data = await response.json();
-            establishUser(usernameField.current!.value, data.access_token); //VALIDATE EMAIL
-            resetFields();
-            nav('/')
-        }else if (response.status == 409){
-            setErrorMessage(response.statusText),[errorMessage] // DOES NOT FUNCTION AS INTENDED
-        } else {
-            window.alert("Call failed");
+        try {
+            console.log('------------------');
+            await authSignUp(emailField.current!.value, passwordField.current!.value)
+            const response = await fetch(`${baseURL}/auth/signup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: usernameField.current!.value,
+                    email: emailField.current!.value,
+                    password: passwordField.current!.value,
+                })
+            });
+            if(response.ok){
+                const data = await response.json();
+                establishUser(usernameField.current!.value, data.access_token); //VALIDATE EMAIL
+                resetFields();
+                nav('/')
+            }else if (response.status == 409){
+                setErrorMessage(response.statusText),[errorMessage] // DOES NOT FUNCTION AS INTENDED
+            } else {
+                window.alert("Call failed");
+            }
+        } catch {
+            setErrorMessage('Invalid')
         }
+        
     }
   
     function establishUser(username: string, token: string){

@@ -1,38 +1,51 @@
 import { FormEvent, useContext, useRef, useState } from "react";
 import { UserContext } from "../contexts/UserProvider";
 import { NavLink, useNavigate } from "react-router-dom"
+import { AuthContext } from "../contexts/AuthProvider";
 
 function SignInForm() {
-    const { setUser } = useContext(UserContext);
-    const usernameField = useRef<HTMLInputElement>(null);
-    const passwordField = useRef<HTMLInputElement>(null);
-    const [ errorMessage, setErrorMessage ] = useState('');
-    const nav = useNavigate()
 
     const baseURL = import.meta.env.VITE_APP_BASE_API;
+
+    const { setUser } = useContext(UserContext);
+    const { authSignIn } = useContext(AuthContext)
+
+    const emailField = useRef<HTMLInputElement>(null);
+    const usernameField = useRef<HTMLInputElement>(null);
+    const passwordField = useRef<HTMLInputElement>(null);
+
+    const [ errorMessage, setErrorMessage ] = useState('');
+    const nav = useNavigate();
+
 
 
     async function handleSignIn(e: FormEvent){
         e.preventDefault();
-        const response = await fetch(`${baseURL}/auth/signin`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: usernameField.current!.value,
-                password: passwordField.current!.value,
-            })
-        });
-        if(response.ok){
-            const data = await response.json();
-            establishUser(usernameField.current!.value, data.access_token);
-            resetFields();
-            nav('/my-profile')
-        }else if (response.status === 409){
-            setErrorMessage(response.statusText)
-        } else {
-            window.alert("Call failed");
+        setErrorMessage('')
+        try {
+            await authSignIn(emailField.current!.value, passwordField.current!.value)
+            const response = await fetch(`${baseURL}/auth/signin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: emailField.current!.value,
+                    password: passwordField.current!.value,
+                })
+            });
+            if(response.ok){
+                const data = await response.json();
+                establishUser(usernameField.current!.value, data.access_token);
+                resetFields();
+                nav('/my-profile');
+            }else if (response.status === 409){
+                setErrorMessage(response.statusText)
+            } else {
+                window.alert("Call failed");
+        }
+        } catch (e) {
+            setErrorMessage('Invalid username or password');
         }
     }
   
@@ -47,7 +60,7 @@ function SignInForm() {
     }
 
     function resetFields(){
-        usernameField.current!.value = '';
+        emailField.current!.value = '';
         passwordField.current!.value = '';
     }
 
@@ -58,6 +71,8 @@ function SignInForm() {
             <p className="error">{errorMessage}</p>
             <label >Username:</label>
             <input type="text" ref={usernameField} placeholder="Username" required/>
+            <label >Email:</label>
+            <input type="email" ref={emailField} placeholder="Email" required/>
             <label >Password:</label>
             <input type="password" ref={passwordField} placeholder="Password" required/>
             <label >{ errorMessage }</label>
