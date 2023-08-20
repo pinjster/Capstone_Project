@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: JSX.Element | JSX.Element
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            console.log(currentUser);
+            console.log(user);
             setUser(currentUser!)
         })
         return () => {
