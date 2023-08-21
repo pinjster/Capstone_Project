@@ -22,7 +22,7 @@ interface AuthContextValues {
 
 
 export const AuthContext = createContext({} as AuthContextValues)
-export function AuthProvider({ children }: { children: JSX.Element | JSX.Element[] }){
+export default function AuthProvider({ children }: { children: JSX.Element | JSX.Element[] }){
 
     const [ user, setUser ] = useState({})
 

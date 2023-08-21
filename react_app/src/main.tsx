@@ -5,7 +5,7 @@ import './index.css'
 import UserProvider from './contexts/UserProvider.tsx'
 import MediaProvider from './contexts/MediaProvider.tsx'
 import RmendProvider from './contexts/RmendProvider.tsx'
-import { AuthProvider } from './contexts/AuthProvider.tsx'
+import AuthProvider from './contexts/AuthProvider.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
