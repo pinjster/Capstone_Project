@@ -21,8 +21,10 @@ function SignUpForm() {
     async function handleSignIn(e: FormEvent){
         e.preventDefault();
         try {
-            console.log('------------------');
             await authSignUp(emailField.current!.value, passwordField.current!.value)
+            console.log(usernameField.current!.value);
+            console.log(emailField.current!.value);
+            console.log(passwordField.current!.value);
             const response = await fetch(`${baseURL}/auth/signup`, {
                 method: 'POST',
                 headers: {

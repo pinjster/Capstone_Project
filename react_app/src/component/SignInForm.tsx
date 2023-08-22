@@ -30,7 +30,7 @@ function SignInForm() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username: emailField.current!.value,
+                    username: usernameField.current!.value,
                     password: passwordField.current!.value,
                 })
             });
@@ -62,6 +62,7 @@ function SignInForm() {
     function resetFields(){
         emailField.current!.value = '';
         passwordField.current!.value = '';
+        emailField.current!.value = '';
     }
 
     return (

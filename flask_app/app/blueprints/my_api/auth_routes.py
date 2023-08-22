@@ -46,7 +46,7 @@ def signup():
         u.commit()
         return jsonify({'update' : f'{u.username} has been registered', 'access_token' : access_token}), 200
     except:
-        return jsonify(response), 400
+        return jsonify(response), 409
 
 
 @auth.route('/signout', methods = ['POST'])
