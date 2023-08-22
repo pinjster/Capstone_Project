@@ -23,7 +23,6 @@ function SignInForm() {
         e.preventDefault();
         setErrorMessage('')
         try {
-            await authSignIn(emailField.current!.value, passwordField.current!.value)
             const response = await fetch(`${baseURL}/auth/signin`, {
                 method: 'POST',
                 headers: {
@@ -36,6 +35,7 @@ function SignInForm() {
             });
             if(response.ok){
                 const data = await response.json();
+                await authSignIn(emailField.current!.value, passwordField.current!.value)
                 establishUser(usernameField.current!.value, data.access_token);
                 resetFields();
                 nav('/my-profile');

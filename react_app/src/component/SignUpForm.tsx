@@ -22,9 +22,6 @@ function SignUpForm() {
         e.preventDefault();
         try {
             await authSignUp(emailField.current!.value, passwordField.current!.value)
-            console.log(usernameField.current!.value);
-            console.log(emailField.current!.value);
-            console.log(passwordField.current!.value);
             const response = await fetch(`${baseURL}/auth/signup`, {
                 method: 'POST',
                 headers: {
@@ -65,6 +62,7 @@ function SignUpForm() {
     function resetFields(){
         usernameField.current!.value = '';
         passwordField.current!.value = '';
+        emailField.current!.value = '';
     }
 
     return (
