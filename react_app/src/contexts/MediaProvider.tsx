@@ -39,7 +39,8 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         }else if(type === 'podcast'){
             return undefined
         }else if(type === 'game'){
-            return undefined
+            const game = getGameByTitle(title);
+            return game
         }
         return undefined
     }
@@ -103,6 +104,12 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         } else {
             return undefined;
         }
+    }
+
+    async function getGameByTitle(title: string){
+        console.log(title);
+        const res = undefined;
+        return res;
     }
 
     const getTvInfo = (id: number) => {
