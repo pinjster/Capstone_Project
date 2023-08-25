@@ -16,7 +16,7 @@ function UserProfilePage() {
     async function UserProfile(username: string){
         const u = await getUserProfile(username);
         if(typeof u != 'undefined'){
-            setSearchedUser((user) => { return user = u})
+            setSearchedUser(u)
         }
     }
 
