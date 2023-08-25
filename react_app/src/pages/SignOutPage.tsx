@@ -6,9 +6,13 @@ import { AuthContext } from "../contexts/AuthProvider"
 
 function SignOutPage() {
 
-  const { setUser, setFollowing } = useContext(UserContext)
+  const { user, setUser, setFollowing } = useContext(UserContext)
   const { authSignOut } = useContext(AuthContext)
   const nav = useNavigate()
+
+  if(user.logged!){
+    nav('/');
+  }
 
   useEffect(() => {
     setUser({

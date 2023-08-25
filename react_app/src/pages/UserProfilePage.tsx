@@ -8,14 +8,14 @@ import FollowButton from "../component/FollowButton"
 
 function UserProfilePage() {
 
-    const { username } = useParams()
-    const { user, getUserProfile } = useContext(UserContext)
-    const [ searchedUser, setSearchedUser ] = useState<UserType | undefined>(undefined) 
-    const nav = useNavigate()
+    const { username } = useParams();
+    const { user, getUserProfile } = useContext(UserContext);
+    const [ searchedUser, setSearchedUser ] = useState<UserType | undefined>(undefined); 
+    const nav = useNavigate();
     async function UserProfile(username: string){
         const u = await getUserProfile(username);
         if(typeof u != 'undefined'){
-            setSearchedUser(u)
+            setSearchedUser(u);
         }
     }
 

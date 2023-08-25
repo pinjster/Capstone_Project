@@ -1,6 +1,6 @@
 import { FormEvent, useContext, useRef, useState } from "react";
 import { UserContext } from "../contexts/UserProvider";
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthProvider";
 
 function SignInForm() {
@@ -21,7 +21,7 @@ function SignInForm() {
 
     async function handleSignIn(e: FormEvent){
         e.preventDefault();
-        setErrorMessage('')
+        setErrorMessage('');
         try {
             const response = await fetch(`${baseURL}/auth/signin`, {
                 method: 'POST',
@@ -45,7 +45,11 @@ function SignInForm() {
                 window.alert("Call failed");
         }
         } catch (e) {
-            setErrorMessage('Invalid username or password');
+            if(typeof e === 'string'){
+                setErrorMessage(e);
+            } else {
+                setErrorMessage('Invalid username or password');
+            }
         }
     }
   
