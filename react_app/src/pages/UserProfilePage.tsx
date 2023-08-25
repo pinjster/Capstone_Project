@@ -12,7 +12,7 @@ function UserProfilePage() {
     const { user, getUserProfile } = useContext(UserContext)
     const [ searchedUser, setSearchedUser ] = useState<UserType | undefined>(undefined) 
     const nav = useNavigate()
-
+    //Test
     async function UserProfile(username: string){
         const u = await getUserProfile(username);
         if(typeof u != 'undefined'){
