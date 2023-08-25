@@ -35,16 +35,20 @@ function SignUpForm() {
             });
             if(response.ok){
                 const data = await response.json();
-                establishUser(usernameField.current!.value, data.access_token); //VALIDATE EMAIL
+                establishUser(usernameField.current!.value, data.access_token);
                 resetFields();
                 nav('/')
             }else if (response.status == 409){
-                setErrorMessage(response.statusText),[errorMessage] // DOES NOT FUNCTION AS INTENDED
+                setErrorMessage(response.statusText);
             } else {
-                window.alert("Call failed");
+                setErrorMessage("Call failed");
             }
-        } catch {
-            setErrorMessage('Invalid')
+        } catch(e) {
+            if(typeof e === 'string'){
+                setErrorMessage(e);    
+            } else {
+                setErrorMessage('Invalid')
+            }
         }
         
     }
@@ -68,14 +72,14 @@ function SignUpForm() {
     return (
         <form onSubmit={handleSignIn} className="auth-form">
             <h3>Sign up here!</h3>
-            <p>Already have an account? Sign in <NavLink to={'/sign-in'}>here</NavLink></p>
+            <p>Already have an account? Sign in <NavLink to={'/sign-in'} className='sign-link'>here</NavLink></p>
+            <p className="error">{ errorMessage }</p>
             <label >Username:</label>
             <input type="text" ref={usernameField} placeholder="Username" required />
             <label >Email:</label>
             <input type="text" ref={emailField} placeholder="Email" required  />
             <label >Password</label>
             <input type="password" ref={passwordField} placeholder="Password" required />
-            <label >{ errorMessage }</label>
             <input type="submit" value="Sign Up" className="auth-submit-btn" />
         </form>
   )

@@ -1,6 +1,6 @@
 import { FormEvent, useContext, useRef, useState } from "react";
 import { UserContext } from "../contexts/UserProvider";
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthProvider";
 
 function SignInForm() {
@@ -8,7 +8,7 @@ function SignInForm() {
     const baseURL = import.meta.env.VITE_APP_BASE_API;
 
     const { setUser } = useContext(UserContext);
-    const { authSignIn } = useContext(AuthContext)
+    const { authSignIn } = useContext(AuthContext);
 
     const emailField = useRef<HTMLInputElement>(null);
     const usernameField = useRef<HTMLInputElement>(null);
@@ -21,7 +21,7 @@ function SignInForm() {
 
     async function handleSignIn(e: FormEvent){
         e.preventDefault();
-        setErrorMessage('')
+        setErrorMessage('');
         try {
             const response = await fetch(`${baseURL}/auth/signin`, {
                 method: 'POST',
@@ -35,17 +35,21 @@ function SignInForm() {
             });
             if(response.ok){
                 const data = await response.json();
-                await authSignIn(emailField.current!.value, passwordField.current!.value)
+                await authSignIn(emailField.current!.value, passwordField.current!.value);
                 establishUser(usernameField.current!.value, data.access_token);
                 resetFields();
                 nav('/my-profile');
             }else if (response.status === 409){
-                setErrorMessage(response.statusText)
+                setErrorMessage(response.statusText);
             } else {
-                window.alert("Call failed");
+                setErrorMessage('Username already in use');
         }
         } catch (e) {
-            setErrorMessage('Invalid username or password');
+            if(typeof e === 'string'){
+                setErrorMessage(e)
+            } else {
+                setErrorMessage('Invalid username or password');
+            }
         }
     }
   
@@ -68,7 +72,7 @@ function SignInForm() {
     return (
         <form onSubmit={handleSignIn} className="auth-form">
             <h3>Sign in here!</h3>
-            <p>Don't have an account? Sign up <NavLink to={'/sign-up'}>here</NavLink></p>
+            <p>Don't have an account? Sign up <NavLink to={'/sign-up'} className='sign-link'>here</NavLink></p>
             <p className="error">{errorMessage}</p>
             <label >Username:</label>
             <input type="text" ref={usernameField} placeholder="Username" required/>
