@@ -40,6 +40,7 @@ function RmendForm({ rmendFor, addRmendToPage }: RmendFormable) {
     }
     
     async function submitRmend(e: FormEvent){
+        //TEST
         e.preventDefault();
         if(typeof mediaResult != 'string' && rating){
             formatGenres();
