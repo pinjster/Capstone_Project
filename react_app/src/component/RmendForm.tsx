@@ -27,14 +27,23 @@ function RmendForm({ rmendFor, addRmendToPage }: RmendFormable) {
 
     const [ rating, setRating ] = useState<number | null>(2.5)
     const [ mediaResult, setMediaResult ] = useState<MediaType | string>('')
+
+    const genreRegex = RegExp(/#\w+|#\w+\S|#\w+$/, 'g')
     
+    function formatGenres(){
+        const gString = genreForm.current!.value;
+        const matchedGenres = [...gString.matchAll(genreRegex)];
+        const genres = matchedGenres.map((genre) => { return genre[0].toLowerCase().slice(1) })
+        if(typeof mediaResult !== 'string'){
+            mediaResult.genre = [...genres, ...mediaResult.genre]
+        }
+    }
     
     async function submitRmend(e: FormEvent){
         e.preventDefault();
         if(typeof mediaResult != 'string' && rating){
-            if(rmendFor.genre.length <= 0){
-                rmendFor.genre.push('')
-            }
+            formatGenres();
+            console.log(mediaResult.genre);
             const newRmend: RmendType = {
                 rmend_id: -1,
                 media: mediaResult,

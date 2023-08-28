@@ -380,3 +380,7 @@ label.star:before {
 .user-rmends {
   width: 100%;
 }
+
+.sign-link {
+  color: var(--redness);
+}
