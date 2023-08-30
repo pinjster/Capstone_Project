@@ -10,7 +10,7 @@ interface MediaContextValues {
     searchMoviesTvTitle: (title :string) => {},
     getTvInfo: (id: number) => Promise<void | MediaType>,
     getMovieInfo: (id: number) => Promise<void | MediaType>,
-    searchByTitle: (type: string, title: string) => Promise<MediaType | undefined>
+    searchByTypeTitle: (type: string, title: string) => Promise<MediaType | undefined>
 }
 
 export const MediaContext = createContext({} as MediaContextValues);
@@ -18,12 +18,18 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     
     const [medias, setMedias] = useState<MediaType[]>([]);
     const moviedb = new MovieDb(import.meta.env.VITE_APP_MOVIE_KEY)
+    const rawgKey = import.meta.env.VITE_APP_GAME_API
 
     const resetMedias = () => {
         setMedias([])
     }
 
-    async function searchByTitle(type: string, title: string) {
+    async function searchByTitle(title: string){
+        setMedias([]);
+        searchMoviesTvTitle(title)
+    }
+
+    async function searchByTypeTitle(type: string, title: string) {
         if(type === 'movie'){
             const movie = await getMovieByTitle(title);
             if(movie){
@@ -107,9 +113,18 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     }
 
     async function getGameByTitle(title: string){
-        console.log(title);
-        const res = undefined;
-        return res;
+        console.log('--------------- this works --------------');
+        const res = await fetch(`https://api.rawg.io/api/games?key=${rawgKey}&search=${title}&search_precise=true&page_size=10`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if(res.ok){
+            const data = await res.json()
+            console.log(data);
+        }
+        return undefined;
     }
 
     const getTvInfo = (id: number) => {
@@ -176,7 +191,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         searchMoviesTvTitle,
         getMovieInfo,
         getTvInfo,
-        searchByTitle
+        searchByTypeTitle
     };
 
     return (
