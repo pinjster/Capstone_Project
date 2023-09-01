@@ -70,7 +70,10 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         } else if(type === 'podcast'){
             return undefined
         } else if(type === 'game'){
-            return undefined
+            const game = await getGameInfo(id)
+            if(game){
+                return game
+            }
         } else {
             return undefined
         }
@@ -115,7 +118,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     }
 
     async function getGameByTitle(title: string){
-        const res = await fetch(`https://api.rawg.io/api/games?key=${rawgKey}&search=${title}&search_precise=true&page_size=10`, {
+        const res = await fetch(`https://api.rawg.io/api/games?key=${rawgKey}&search=${title}&search_precise=true&page_size=5`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json"
@@ -125,7 +128,9 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
             const data = await res.json()
             console.log(data);
             for(let game of data.results){
-
+                const newGame = await getGameInfo(game.id)
+                console.log(newGame);
+                setMedias((medias) => [...medias, newGame!])
             }
         }
         return undefined;
@@ -159,7 +164,8 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
             }
         });
         if(res.ok){
-            const formatGame = GameToMediaType(res);
+            const data = await res.json()
+            const formatGame = GameToMediaType(data);
             return formatGame;
         } 
         return
@@ -184,13 +190,14 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     }
     
     function GameToMediaType(game: any): MediaType {
-        const genres = game.genres.map((genre: any) => { genre.name.toLowerCase() })
+        console.log(game);
+        const genres = game.genres.map((genre: any) => { return genre.name })
         return {
             title: game.name,
-            year: game.released,
+            year: game.released.slice(0,4),
             mediaID: game.id,
             type: "game",
-            description: game.description,
+            description: game.description_raw,
             author: 'some folks',
             img: game.background_image,
             genre: genres 

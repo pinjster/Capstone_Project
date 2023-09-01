@@ -99,7 +99,9 @@ a:hover {
 .media-img {
   width:  11rem;
   height:  auto;
-  aspect-ratio: 1 / 1.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding-right: 20px;
 }
 
