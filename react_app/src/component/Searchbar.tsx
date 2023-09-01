@@ -4,13 +4,13 @@ import { MediaContext } from "../contexts/MediaProvider";
 export default function Searchbar() {
 
     const searchField = useRef<HTMLInputElement>(null);
-    const { searchMoviesTvTitle, resetMedias } = useContext(MediaContext)
+    const { resetMedias, searchMediasByTitle } = useContext(MediaContext)
 
     async function submitSearch(e: FormEvent){
         e.preventDefault();
         resetMedias();
         const title = searchField.current!.value;
-        searchMoviesTvTitle(title);
+        searchMediasByTitle(title);
     }
 
     return (

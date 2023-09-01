@@ -10,7 +10,8 @@ interface MediaContextValues {
     searchMoviesTvTitle: (title :string) => {},
     getTvInfo: (id: number) => Promise<void | MediaType>,
     getMovieInfo: (id: number) => Promise<void | MediaType>,
-    searchByTypeTitle: (type: string, title: string) => Promise<MediaType | undefined>
+    searchByTypeTitle: (type: string, title: string) => Promise<MediaType | undefined>,
+    searchMediasByTitle: (title: string) => Promise<void>
 }
 
 export const MediaContext = createContext({} as MediaContextValues);
@@ -24,9 +25,10 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         setMedias([])
     }
 
-    async function searchByTitle(title: string){
+    async function searchMediasByTitle(title: string){
         setMedias([]);
         searchMoviesTvTitle(title)
+        getGameByTitle(title)
     }
 
     async function searchByTypeTitle(type: string, title: string) {
@@ -113,7 +115,6 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     }
 
     async function getGameByTitle(title: string){
-        console.log('--------------- this works --------------');
         const res = await fetch(`https://api.rawg.io/api/games?key=${rawgKey}&search=${title}&search_precise=true&page_size=10`, {
             method: 'GET',
             headers: {
@@ -123,6 +124,9 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         if(res.ok){
             const data = await res.json()
             console.log(data);
+            for(let game of data.results){
+
+            }
         }
         return undefined;
     }
@@ -147,6 +151,20 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         return movie
     }
 
+    async function getGameInfo(id: number) {
+        const res = await fetch(`https://api.rawg.io/api/games/${id}?key=${rawgKey}`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if(res.ok){
+            const formatGame = GameToMediaType(res);
+            return formatGame;
+        } 
+        return
+    }
+
     function MovieToMediaType(movie: MovieResponse): MediaType {
         const genre: string[] = [];
         for(let gen of movie.genres!){
@@ -165,6 +183,20 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         };
     }
     
+    function GameToMediaType(game: any): MediaType {
+        const genres = game.genres.map((genre: any) => { genre.name.toLowerCase() })
+        return {
+            title: game.name,
+            year: game.released,
+            mediaID: game.id,
+            type: "game",
+            description: game.description,
+            author: 'some folks',
+            img: game.background_image,
+            genre: genres 
+        }
+    }
+
     function TvToMediaType(tv: ShowResponse): MediaType {
         const genre: string[] = [];
         for(let gen of tv.genres!){
@@ -191,7 +223,8 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         searchMoviesTvTitle,
         getMovieInfo,
         getTvInfo,
-        searchByTypeTitle
+        searchByTypeTitle,
+        searchMediasByTitle
     };
 
     return (
