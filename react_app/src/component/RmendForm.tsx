@@ -16,7 +16,7 @@ interface RmendFormable {
 
 function RmendForm({ rmendFor, addRmendToPage }: RmendFormable) {
     
-        const { searchByTitle } = useContext(MediaContext)
+        const { searchByTypeTitle } = useContext(MediaContext)
         const { user } = useContext(UserContext)
         const { addRmend } = useContext(RmendContext)
 
@@ -73,7 +73,7 @@ function RmendForm({ rmendFor, addRmendToPage }: RmendFormable) {
         e.preventDefault();
         const title = rmendTitleForm.current!.value
         const type = rmendTypeForm.current!.value
-        const result = await searchByTitle(type, title)
+        const result = await searchByTypeTitle(type, title)
         if(typeof result != 'undefined'){
             setMediaResult(result)
         } else {

@@ -28,7 +28,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     async function searchMediasByTitle(title: string){
         setMedias([]);
         searchMoviesTvTitle(title)
-        getGameByTitle(title)
+        searchGamesTitle(title)
     }
 
     async function searchByTypeTitle(type: string, title: string) {
@@ -47,8 +47,10 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         }else if(type === 'podcast'){
             return undefined
         }else if(type === 'game'){
-            const game = getGameByTitle(title);
-            return game
+            const game = await getGameByTitle(title);
+            if(game){
+                return game
+            }
         }
         return undefined
     }
@@ -70,9 +72,9 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         } else if(type === 'podcast'){
             return undefined
         } else if(type === 'game'){
-            const game = await getGameInfo(id)
+            const game = await getGameInfo(id);
             if(game){
-                return game
+                return game;
             }
         } else {
             return undefined
@@ -99,6 +101,23 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
             .catch(console.error),[]
     }
 
+    async function searchGamesTitle(title: string){
+        const res = await fetch(`https://api.rawg.io/api/games?key=${rawgKey}&search=${title}&exclude_additions=trur&search_precise=true&page_size=5`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if(res.ok){
+            const data = await res.json();
+            for(let game of data.results){
+                const newGame = await getGameInfo(game.id);
+                setMedias((medias) => [...medias, newGame!]);
+            }
+        }
+        return undefined;
+    }
+
     async function getMovieByTitle(title: string){
         const result = await moviedb.searchMovie({ query: title });
         if(typeof result.results != 'undefined' && result.results?.length > 0){
@@ -118,19 +137,17 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     }
 
     async function getGameByTitle(title: string){
-        const res = await fetch(`https://api.rawg.io/api/games?key=${rawgKey}&search=${title}&search_precise=true&page_size=5`, {
+        const res = await fetch(`https://api.rawg.io/api/games?key=${rawgKey}&search=${title}&search_precise=true&search_exact=true&page_size=1`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json"
             }
         })
         if(res.ok){
-            const data = await res.json()
-            console.log(data);
+            const data = await res.json();
             for(let game of data.results){
-                const newGame = await getGameInfo(game.id)
-                console.log(newGame);
-                setMedias((medias) => [...medias, newGame!])
+                const newGame = await getGameInfo(game.id);
+                return newGame;
             }
         }
         return undefined;
@@ -164,7 +181,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
             }
         });
         if(res.ok){
-            const data = await res.json()
+            const data = await res.json();
             const formatGame = GameToMediaType(data);
             return formatGame;
         } 
@@ -174,7 +191,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     function MovieToMediaType(movie: MovieResponse): MediaType {
         const genre: string[] = [];
         for(let gen of movie.genres!){
-            genre.push(gen.name!)
+            genre.push(gen.name!);
         }
         return {
             title: movie.title || 'unknown',
@@ -190,7 +207,6 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     }
     
     function GameToMediaType(game: any): MediaType {
-        console.log(game);
         const genres = game.genres.map((genre: any) => { return genre.name })
         return {
             title: game.name,
