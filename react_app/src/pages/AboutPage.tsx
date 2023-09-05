@@ -23,6 +23,7 @@ function AboutPage() {
           After having spent so much time into trying to find new movies, shows, and music, especially those interconnected,
           I decided to build an application myself to allow users the freedom to recommend any media for any other media.
         </p>
+        <br />
         <div>
           <p>rMEND uses multiple different third-parties to gather its results.</p>
           <h3>Movies & TV</h3>
@@ -46,7 +47,6 @@ function AboutPage() {
         <p>rMEND is currently a non-commercial project.</p>
       </div>
     </Body>
-    
   )
 }
 
