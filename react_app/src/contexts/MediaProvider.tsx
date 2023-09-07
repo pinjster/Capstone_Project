@@ -11,7 +11,8 @@ interface MediaContextValues {
     getTvInfo: (id: number) => Promise<void | MediaType>,
     getMovieInfo: (id: number) => Promise<void | MediaType>,
     searchByTypeTitle: (type: string, title: string) => Promise<MediaType | undefined>,
-    searchMediasByTitle: (title: string) => Promise<void>
+    searchMediasByTitle: (title: string) => Promise<void>,
+    getSpotifyToken(): Promise<void>
 }
 
 export const MediaContext = createContext({} as MediaContextValues);
@@ -29,6 +30,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         setMedias([]);
         searchMoviesTvTitle(title)
         searchGamesTitle(title)
+        getSpotifyToken();
     }
 
     async function searchByTypeTitle(type: string, title: string) {
@@ -55,7 +57,23 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         return undefined
     }
 
-        //NEEDS FIXED I GUESS
+    const spotID = import.meta.env.VITE_APP_MUSIC_ID
+    const spotSecret = import.meta.env.VITE_APP_MUSIC_SECRET
+
+    async function getSpotifyToken(){
+        const response = await fetch(`https://accounts.spotify.com/api/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': '',
+                'Authorization': `Basic ${spotID}:${spotSecret}`
+            },
+        });
+        if(response.ok){
+            const data = await response.json();
+            console.log(data);
+        }
+    }
+
     const searchByMediaId = async (type: string, id: number): Promise<MediaType | undefined> => {
         if(type === 'movie'){
             const movie = await getMovieInfo(id);
@@ -247,7 +265,8 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         getMovieInfo,
         getTvInfo,
         searchByTypeTitle,
-        searchMediasByTitle
+        searchMediasByTitle,
+        getSpotifyToken
     };
 
     return (
