@@ -64,7 +64,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         const response = await fetch(`https://accounts.spotify.com/api/`, {
             method: 'POST',
             headers: {
-                'Content-Type': '',
+                'Content-Type': 'application/json',
                 'Authorization': `Basic ${spotID}:${spotSecret}`
             },
         });
