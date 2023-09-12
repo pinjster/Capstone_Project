@@ -12,8 +12,7 @@ interface MediaContextValues {
     getTvInfo: (id: number) => Promise<void | MediaType>,
     getMovieInfo: (id: number) => Promise<void | MediaType>,
     searchByTypeTitle: (type: string, title: string) => Promise<MediaType | undefined>,
-    searchMediasByTitle: (title: string) => Promise<void>,
-    getSpotifyToken(): Promise<void>
+    searchMediasByTitle: (title: string) => Promise<void>
 }
 
 export const MediaContext = createContext({} as MediaContextValues);
@@ -22,6 +21,8 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     const [medias, setMedias] = useState<MediaType[]>([]);
     const moviedb = new MovieDb(import.meta.env.VITE_APP_MOVIE_KEY)
     const rawgKey = import.meta.env.VITE_APP_GAME_API
+    const spotID = import.meta.env.VITE_APP_MUSIC_ID
+    const spotSecret = import.meta.env.VITE_APP_MUSIC_SECRET
 
     const resetMedias = () => {
         setMedias([])
@@ -29,9 +30,9 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
 
     async function searchMediasByTitle(title: string){
         setMedias([]);
-        searchMoviesTvTitle(title)
-        searchGamesTitle(title)
-        getSpotifyToken();
+        await searchMoviesTvTitle(title);
+        await searchGamesTitle(title);
+        await searchAlbumsTitle(title);
     }
 
     async function searchByTypeTitle(type: string, title: string) {
@@ -58,16 +59,6 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         return undefined
     }
 
-    const spotID = import.meta.env.VITE_APP_MUSIC_ID
-    const spotSecret = import.meta.env.VITE_APP_MUSIC_SECRET
-
-    async function getSpotifyToken(){
-        const spotify = SpotifyApi.withClientCredentials(spotID, spotSecret);
-        console.log(spotify);
-        const items = await spotify.search('ocean eyes', ['album']);
-        console.log(items);
-    }
-
     const searchByMediaId = async (type: string, id: number): Promise<MediaType | undefined> => {
         if(type === 'movie'){
             const movie = await getMovieInfo(id);
@@ -91,6 +82,16 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         } else {
             return undefined
         }
+    }
+
+    async function searchAlbumsTitle(title: string){
+        const spotify = SpotifyApi.withClientCredentials(spotID, spotSecret);
+        const items = await spotify.search(title, ['album'], undefined, 10);
+        for(let album of items.albums.items){
+            let formatAlbum = AlbumToMediaType(album);
+            setMedias((medias) => [...medias, formatAlbum])
+        }
+
     }
 
     const searchMoviesTvTitle = async (title: string) => {
@@ -232,6 +233,21 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         }
     }
 
+    function AlbumToMediaType(album: any): MediaType {
+        const genre: string[] = ['none'];
+        console.log(album);
+        return {
+            title: album.name,
+            year: album.release_date.slice(0,4),
+            mediaID: album.id,
+            type: 'album',
+            description: '',
+            author: album.artists[0].name,
+            img: album.images[0].url,
+            genre: genre,
+        }
+    }
+
     function TvToMediaType(tv: ShowResponse): MediaType {
         const genre: string[] = [];
         for(let gen of tv.genres!){
@@ -259,8 +275,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         getMovieInfo,
         getTvInfo,
         searchByTypeTitle,
-        searchMediasByTitle,
-        getSpotifyToken
+        searchMediasByTitle
     };
 
     return (

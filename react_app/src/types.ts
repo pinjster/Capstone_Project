@@ -9,7 +9,7 @@ export type CurrentUser = {
 export type MediaType = {
     title: string,
     year: string,
-    mediaID: number,
+    mediaID: number | string,
     type: string,
     description: string,
     author: string,
