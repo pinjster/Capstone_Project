@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { MediaType } from "../types";
 import { MovieDb, MovieResponse, ShowResponse } from "moviedb-promise";
+import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 
 interface MediaContextValues {
     medias: MediaType[],
@@ -61,17 +62,10 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     const spotSecret = import.meta.env.VITE_APP_MUSIC_SECRET
 
     async function getSpotifyToken(){
-        const response = await fetch(`https://accounts.spotify.com/api/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Basic ${spotID}:${spotSecret}`
-            },
-        });
-        if(response.ok){
-            const data = await response.json();
-            console.log(data);
-        }
+        const spotify = SpotifyApi.withClientCredentials(spotID, spotSecret);
+        console.log(spotify);
+        const items = await spotify.search('ocean eyes', ['album']);
+        console.log(items);
     }
 
     const searchByMediaId = async (type: string, id: number): Promise<MediaType | undefined> => {
