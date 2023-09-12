@@ -7,7 +7,7 @@ interface MediaContextValues {
     medias: MediaType[],
     setMedias: Dispatch<SetStateAction<MediaType[]>>,
     resetMedias: () => void,
-    searchByMediaId: (type: string, id: number) => Promise<MediaType | undefined>,
+    searchByMediaId: (type: string, id: string) => Promise<MediaType | undefined>,
     searchMoviesTvTitle: (title :string) => {},
     getTvInfo: (id: number) => Promise<void | MediaType>,
     getMovieInfo: (id: number) => Promise<void | MediaType>,
@@ -47,7 +47,10 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
                 return tv
             }
         }else if(type === 'album'){
-            return undefined
+            const album = await getAlbumByTitle(title);
+            if(album){
+                return album
+            }
         }else if(type === 'podcast'){
             return undefined
         }else if(type === 'game'){
@@ -59,23 +62,26 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         return undefined
     }
 
-    const searchByMediaId = async (type: string, id: number): Promise<MediaType | undefined> => {
+    const searchByMediaId = async (type: string, id: string): Promise<MediaType | undefined> => {
         if(type === 'movie'){
-            const movie = await getMovieInfo(id);
+            const movie = await getMovieInfo(parseInt(id));
             if(movie){
                 return movie;
             }
         } else if(type === 'tv'){
-            const tv = await getTvInfo(id);
+            const tv = await getTvInfo(parseInt(id));
             if(tv){
                 return tv;
             }
         } else if(type === 'album'){
-            return undefined
+            const album = await getAlbumInfo(id)
+            if(album){
+                return album;
+            }
         } else if(type === 'podcast'){
             return undefined
         } else if(type === 'game'){
-            const game = await getGameInfo(id);
+            const game = await getGameInfo(parseInt(id));
             if(game){
                 return game;
             }
@@ -88,10 +94,9 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         const spotify = SpotifyApi.withClientCredentials(spotID, spotSecret);
         const items = await spotify.search(title, ['album'], undefined, 10);
         for(let album of items.albums.items){
-            let formatAlbum = AlbumToMediaType(album);
+            const formatAlbum = await getAlbumInfo(album.id);
             setMedias((medias) => [...medias, formatAlbum])
         }
-
     }
 
     const searchMoviesTvTitle = async (title: string) => {
@@ -131,6 +136,15 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         return undefined;
     }
 
+    async function getAlbumByTitle(title: string){
+        const spotify = SpotifyApi.withClientCredentials(spotID, spotSecret);
+        const items = await spotify.search(title, ['album'], undefined, 1);
+        for(let album of items.albums.items){
+            const formatAlbum = await getAlbumInfo(album.id);
+            return formatAlbum
+        }
+    }
+
     async function getMovieByTitle(title: string){
         const result = await moviedb.searchMovie({ query: title });
         if(typeof result.results != 'undefined' && result.results?.length > 0){
@@ -164,6 +178,13 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
             }
         }
         return undefined;
+    }
+
+    async function getAlbumInfo(id: string){
+        const spotify = SpotifyApi.withClientCredentials(spotID, spotSecret);
+        const album = await spotify.albums.get(id);
+        const formatAlbum = AlbumToMediaType(album);
+        return formatAlbum
     }
 
     const getTvInfo = (id: number) => {
@@ -234,17 +255,25 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
     }
 
     function AlbumToMediaType(album: any): MediaType {
-        const genre: string[] = ['none'];
-        console.log(album);
+        const genres: string[] = [];
+        if(album.genres.length > 0){
+            for(let genre of album.genres){
+                genres.push(genre.name)
+            }
+        }
+        let description: string = `Artist: ${album.artists[0].name}\n`;
+        for(let track of album.tracks.items){
+            description += `${track.track_number}: ${track.name}\n`
+        }
         return {
             title: album.name,
             year: album.release_date.slice(0,4),
             mediaID: album.id,
             type: 'album',
-            description: '',
+            description: description,
             author: album.artists[0].name,
             img: album.images[0].url,
-            genre: genre,
+            genre: genres,
         }
     }
 

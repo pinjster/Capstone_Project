@@ -26,7 +26,7 @@ export type RmendType = {
     dateAdded: string,
     rmendForTitle: string,
     rmendForType: string,
-    rmendForMediaId: number,
+    rmendForMediaId: number | string,
     totalLikes: number,
 }
 

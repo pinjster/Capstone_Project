@@ -111,6 +111,8 @@ a:hover {
 
 .media-description-indent {
   text-indent: 2em;
+  text-wrap: wrap;
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 div.stars {

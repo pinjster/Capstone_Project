@@ -39,7 +39,7 @@ function MediaPage() {
 
   async function searchByTypeId(){
     if(typeof type != 'undefined' && typeof id != 'undefined'){
-      const media = await searchByMediaId(type, parseInt(id))
+      const media = await searchByMediaId(type, id)
       if(typeof media != 'undefined'){
         setThisMedia(media);
         getRmendsForMedia();

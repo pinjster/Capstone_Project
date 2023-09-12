@@ -25,7 +25,7 @@ function Media({ media, children }: Mediable) {
                     <h3><NavLink className='media-title-link' to={`/media/${media.type}/${media.mediaID}/${index}`}>{ media.title } ({ media.year })</NavLink></h3>
                     <p>Type: <MediaTypeIcon type={media.type} /> </p>
                     <p>Description: </p> 
-                    <p className="media-description-indent">{ media.description }</p>
+                    <pre className="media-description-indent">{ media.description }</pre>
                     <p>Genres: { media.genre.map((gen, i) => <span key={i} className="genre" >#{gen.toLowerCase()} </span>) }</p>
                 </div>
             </div> 
