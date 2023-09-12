@@ -33,6 +33,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         await searchMoviesTvTitle(title);
         await searchGamesTitle(title);
         await searchAlbumsTitle(title);
+        await searchPodcastsTitle(title);
     }
 
     async function searchByTypeTitle(type: string, title: string) {
@@ -52,7 +53,10 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
                 return album
             }
         }else if(type === 'podcast'){
-            return undefined
+            const podcast = await getPodcastByTitle(title);
+            if(podcast){
+                return podcast;
+            }
         }else if(type === 'game'){
             const game = await getGameByTitle(title);
             if(game){
@@ -79,7 +83,10 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
                 return album;
             }
         } else if(type === 'podcast'){
-            return undefined
+            const podcast = await getPodcastInfo(id);
+            if(podcast){
+                return podcast;
+            }
         } else if(type === 'game'){
             const game = await getGameInfo(parseInt(id));
             if(game){
@@ -87,6 +94,15 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
             }
         } else {
             return undefined
+        }
+    }
+
+    async function searchPodcastsTitle(title: string){
+        const spotify = SpotifyApi.withClientCredentials(spotID, spotSecret);
+        const items = await spotify.search(title, ['show'], 'ES', 10);
+        for(let show of items.shows.items){
+            const formatPodcast = await getPodcastInfo(show.id);
+            setMedias((medias) => [...medias, formatPodcast]);
         }
     }
 
@@ -136,6 +152,15 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         return undefined;
     }
 
+    async function getPodcastByTitle(title: string){
+        const spotify = SpotifyApi.withClientCredentials(spotID, spotSecret);
+        const items = await spotify.search(title, ['show'], 'ES', 1);
+        for(let show of items.shows.items){
+            const formatPodcast = await getPodcastInfo(show.id);
+            return formatPodcast
+        }
+    }
+
     async function getAlbumByTitle(title: string){
         const spotify = SpotifyApi.withClientCredentials(spotID, spotSecret);
         const items = await spotify.search(title, ['album'], undefined, 1);
@@ -178,6 +203,13 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
             }
         }
         return undefined;
+    }
+
+    async function getPodcastInfo(id: string){
+        const spotify = SpotifyApi.withClientCredentials(spotID, spotSecret);
+        const podcast = await spotify.shows.get(id, 'ES');
+        const formatPodcast = PodcastToMediaType(podcast);
+        return formatPodcast;
     }
 
     async function getAlbumInfo(id: string){
@@ -240,11 +272,25 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         };
     }
     
+    function PodcastToMediaType(podcast: any): MediaType {
+        const genres: string[] = [];
+        return {
+            title: podcast.name,
+            year: podcast.episodes.items[0].release_date.slice(0,4),
+            mediaID: podcast.id,
+            type: 'podcast',
+            description: podcast.description,
+            author: podcast.publisher,
+            img: podcast.images[0].url,
+            genre: genres
+        }
+    }
+
     function GameToMediaType(game: any): MediaType {
         const genres = game.genres.map((genre: any) => { return genre.name })
         return {
             title: game.name,
-            year: game.released.slice(0,4),
+            year: game.released?.slice(0,4) || '????',
             mediaID: game.id,
             type: "game",
             description: game.description_raw,
@@ -267,7 +313,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         }
         return {
             title: album.name,
-            year: album.release_date.slice(0,4),
+            year: album.release_date.slice(0,4) || '????',
             mediaID: album.id,
             type: 'album',
             description: description,
