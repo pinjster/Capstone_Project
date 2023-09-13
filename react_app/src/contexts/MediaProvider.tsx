@@ -56,6 +56,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
             const podcast = await getPodcastByTitle(title);
             if(podcast){
                 return podcast;
+                //bad internet
             }
         }else if(type === 'game'){
             const game = await getGameByTitle(title);
