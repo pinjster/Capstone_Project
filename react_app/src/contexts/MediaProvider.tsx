@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { MediaType } from "../types";
 import { MovieDb, MovieResponse, ShowResponse } from "moviedb-promise";
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
+import google from "@googleapis/books";
 
 interface MediaContextValues {
     medias: MediaType[],
@@ -34,6 +35,7 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
         await searchGamesTitle(title);
         await searchAlbumsTitle(title);
         await searchPodcastsTitle(title);
+        await searchBooksTitle(title);
     }
 
     async function searchByTypeTitle(type: string, title: string) {
@@ -56,7 +58,6 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
             const podcast = await getPodcastByTitle(title);
             if(podcast){
                 return podcast;
-                //bad internet
             }
         }else if(type === 'game'){
             const game = await getGameByTitle(title);
@@ -105,6 +106,11 @@ export default function MediaProvider({ children }: { children: JSX.Element | JS
             const formatPodcast = await getPodcastInfo(show.id);
             setMedias((medias) => [...medias, formatPodcast]);
         }
+    }
+
+    async function searchBooksTitle(title: string){
+        console.log(title);
+        
     }
 
     async function searchAlbumsTitle(title: string){
