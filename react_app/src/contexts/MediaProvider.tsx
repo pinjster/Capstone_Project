@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { MediaType } from "../types";
 import { MovieDb, MovieResponse, ShowResponse } from "moviedb-promise";
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
-import google from "@googleapis/books";
 
 interface MediaContextValues {
     medias: MediaType[],

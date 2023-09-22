@@ -35,14 +35,16 @@ function AboutPage() {
           <h3>Books</h3>
             <p>this medium is not yet applied</p>
           <h3>Games</h3>
-            <p>Resuts from <a href="https://rawg.io/">RAWG</a></p>
+            <p>Results from <a href="https://rawg.io/">RAWG</a></p>
             <a href="https://rawg.io/">
               <img src="https://i1.wp.com/operationrainfall.com/wp-content/uploads/2019/06/0.jpg" alt="RAWG Logo" />
             </a>
           <h3>Music</h3>
-            <p>this medium is not yet applied</p>
+            <p>Results from <a href="https://www.spotify.com/us/">Spotify</a></p>
+            <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_Green-768x231.png" alt="Spotify Logo" />
           <h3>Podcast</h3>
-          <p>this medium is not yet applied</p>
+            <p>Results from <a href="https://www.spotify.com/us/">Spotify</a></p>
+            <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_Green-768x231.png" alt="Spotify Logo" />
         </div>
         <p>rMEND is currently a non-commercial project.</p>
       </div>
