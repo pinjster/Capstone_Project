@@ -34,7 +34,7 @@ export default function AuthProvider({ children }: { children: JSX.Element | JSX
         messagingSenderId: import.meta.env.VITE_APP_FIREBASE_MESSAGING_SENDER_ID,
         appId: import.meta.env.VITE_APP_FIREBASE_APP_ID
     };
-    //In dev branch
+    
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
