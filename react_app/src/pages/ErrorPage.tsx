@@ -3,7 +3,6 @@
 function ErrorPage() {
   return (
     <div>
-      <p>Necessary Page?</p>
     </div>
   )
 }
