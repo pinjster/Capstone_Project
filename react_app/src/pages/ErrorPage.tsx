@@ -2,7 +2,9 @@
 
 function ErrorPage() {
   return (
-    <div>ErrorPage</div>
+    <div>
+      <p>Necessary Page?</p>
+    </div>
   )
 }
 
